@@ -1,11 +1,10 @@
+Here Luis: I will update this with deployment steps in the next week or so if needed
+
+So far I modified the original code to make login work without confirmation email and added the ability to add roles.
+
+Each one of us should be able to deploy this in pycharm or visual studio. 
+
+
 XMEN ACADEMY
 ======
 
-This repository contains the source code examples for the second edition of my O'Reilly book [Flask Web Development](http://www.flaskbook.com).
-
-The commits and tags in this repository were carefully created to match the sequence in which concepts are presented in the book. Please read the section titled "How to Work with the Example Code" in the book's preface for instructions.
-
-For Readers of the First Edition of the Book
---------------------------------------------
-
-The code examples for the first edition of the book were moved to a different repository: [https://github.com/miguelgrinberg/flasky-first-edition](https://github.com/miguelgrinberg/flasky-first-edition).

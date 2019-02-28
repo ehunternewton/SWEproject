@@ -1,3 +1,6 @@
+## HISTORY
+#  LG-2019FEB28: added to be able to access db.session in auth blueprint
+
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
@@ -23,6 +26,7 @@ def create_app(config_name):
     bootstrap.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
+    app.app_context().push()  #  LG-2019FEB28
     db.init_app(app)
     login_manager.init_app(app)
 

@@ -1,12 +1,17 @@
 ## HISTORY
 #  LG-2019FEB27: Updated User Creation: Added Role Selection to form [SelectField]
+#  LG-2019FEB28: method: get_role_choices() -- to get from db values instead of hardcoded
+
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User
+from ..models import User, Role
 
+def get_role_choices():
+    roles = Role.query.with_entities(Role.id, Role.name).filter(Role.name != 'Admin')
+    return roles
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
@@ -27,7 +32,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
-    role = SelectField(u'User Role', choices=[('3', 'Student'), ('2', 'Teacher')])
+    role = SelectField(u'User Role', choices=get_role_choices())
     submit = SubmitField('Register')
 
     def validate_email(self, field):

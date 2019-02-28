@@ -3,16 +3,23 @@
 ##### Feel free to update as you wish on local dev environment. We can work out the merges that go into master when approved
 
 ######Here Luis:
-I suggest everybody make a dev git branch, I will do as well to avoid directly making changes on master
+I suggest everybody make a dev git branch, I will do as well to avoid directly making changes on master. 
 
+
+Looking forward to settle on DB Models and Classes. Besides the coding part each of us should do one document
+
+####Propose a document to prepare, Brian is doing requirements, Hunter is doing UML diagrams (does this include action diagram?), I am doing Software Plan, Donald is doing Database Design
+
+######Other useful documents are: User Guide, Testing Acceptance, User Interface (pages, errors), Test Cases
+
+Pre-Installation Steps: Install Python3!
+
+#INSTALLATION / RUN Instructions
 So far I modified the original code to make login work without confirmation email and added the ability to add roles.
 
 Each one of us should be able to deploy this in pycharm or visual studio. 
 
 
-Pre-Installation Steps: Install Python3!
-
-INSTALLATION / RUN Instructions
 
 1- after downloading the files run this command in terminal/DOS/Shell to create a virtual environment, make sure you are in xmenacademy folder:
 

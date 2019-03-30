@@ -25,13 +25,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
                     </li>
+                    {% if session.is_admin %}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                        </li>
+                    {% endif %}
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="/register">Register</a>#}
+{#                    </li>#}
                 {% endif %}
             </ul>
           </div>

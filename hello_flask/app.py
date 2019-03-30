@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
 # from data import Articles
 from flask_mysqldb import MySQL
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators,SelectField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -83,6 +83,7 @@ class RegisterForm(Form):
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
     confirm = PasswordField('Confirm Password')
+    roles = SelectField(u'Role', choices=[('1', 'Admin'), ('2', 'Teacher'), ('3', 'Student')])
 
 
 # User Register
@@ -94,12 +95,13 @@ def register():
         email = form.email.data
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
+        roles = form.roles.data
 
         # Create cursor
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO users(name, email, username, password) VALUES(%s, %s, %s, %s);", (name, email, username, password))
+        cur.execute("INSERT INTO users(name, email, username, password,role_id) VALUES(%s, %s, %s, %s,%s);", (name, email, username, password,roles))
 
         # Commit to DB
         mysql.connection.commit()
@@ -131,12 +133,18 @@ def login():
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
+            is_admin = data['role_id'] == 1;
+            is_teacher = data['role_id'] == 2;
+            is_student = data['role_id'] == 3;
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Passed
                 session['logged_in'] = True
                 session['username'] = username
+                session['is_admin'] = is_admin;
+                session['is_teacher'] = is_teacher;
+                session['is_student'] = is_student;
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('dashboard'))

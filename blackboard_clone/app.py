@@ -9,19 +9,20 @@ app = Flask(__name__)
 
 
 # Config MySQL
-# aws db
-# app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = '12345678'
-# app.config['MYSQL_DB'] = 'myflaskapp'
-# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+aws db
+app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = '12345678'
+app.config['MYSQL_DB'] = 'myflaskapp'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # local db
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '123456'
-app.config['MYSQL_DB'] = 'xmendb'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = '123456'
+# app.config['MYSQL_DB'] = 'xmendb'
+# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
 # init MySQL
 mysql = MySQL(app)
 

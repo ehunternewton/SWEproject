@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="jumbotron text-center">
+        <h1>Welcome to xMenAcademy!</h1>
+        <p class="lead">A simple website built with the Python Flask framework, where you can keep up with your courses
+        online</p>
+        {% if session.admin_logged_in == NULL %}
+            <a href="/student_login" class="btn btn-success">Log In</a>
+        {% endif %}
+    </div>
+{% endblock %}

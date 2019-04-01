@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
+    <a class="btn btn-success" href="/create_course">Create Course</a>
+    <a class="btn btn-success" href="/course_registration">Course Registration</a>
+    <a class="btn btn-success" href="/user_registration">User Registration</a>
+    <hr>
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </table>
+{% endblock %}

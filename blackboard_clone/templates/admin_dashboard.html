@@ -12,7 +12,8 @@
     <table class="table table-striped">
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Username</th>
             <th>Email</th>
             <th></th>
@@ -21,7 +22,8 @@
         {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.name }}</td>
+                <td>{{ student.first_name }}</td>
+                <td>{{ student.last_name }}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
                 <td><a href="#" class="btn btn-light float-right">Edit</a></td>
@@ -41,7 +43,8 @@
     <table class="table table-striped">
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Username</th>
             <th>Email</th>
             <th></th>
@@ -50,7 +53,8 @@
         {% for teacher in teachers %}
             <tr>
                 <td>{{ teacher.id }}</td>
-                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.first_name }}</td>
+                <td>{{ teacher.last_name }}</td>
                 <td>{{ teacher.username }}</td>
                 <td>{{ teacher.email }}</td>
                 <td><a href="#" class="btn btn-light float-right">Edit</a></td>
@@ -70,7 +74,8 @@
     <table class="table table-striped">
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Username</th>
             <th>Email</th>
             <th></th>
@@ -79,7 +84,8 @@
         {% for admin in admins %}
             <tr>
                 <td>{{ admin.id }}</td>
-                <td>{{ admin.name }}</td>
+                <td>{{ admin.first_name }}</td>
+                <td>{{ admin.last_name }}</td>
                 <td>{{ admin.username }}</td>
                 <td>{{ admin.email }}</td>
                 <td><a href="#" class="btn btn-light float-right">Edit</a></td>

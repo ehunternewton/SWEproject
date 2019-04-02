@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 # Config MySQL
-aws db
+# aws db
 app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '12345678'
@@ -193,7 +193,21 @@ def admin_logged_in(f):
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 @admin_logged_in
 def admin_dashboard():
-    return render_template('admin_dashboard.html')
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Get students
+    cur.execute("SELECT * FROM users WHERE role_id = 3")
+    students = cur.fetchall()
+    # Get teachers
+    cur.execute("SELECT * FROM users WHERE role_id = 2")
+    teachers = cur.fetchall()
+    # Get admins
+    cur.execute("SELECT * FROM users WHERE role_id = 1")
+    admins = cur.fetchall()
+    # Close connection
+    cur.close()
+    return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins)
 
 
 # Logout

@@ -221,7 +221,8 @@ def logout():
 
 # Register Form
 class UserRegisterForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=50)])
+    first_name = StringField('First Name', [validators.Length(min=1, max=50)])
+    last_name = StringField('Last Name', [validators.Length(min=1, max=50)])
     username = StringField('Username', [validators.Length(min=4, max=25)])
     email = StringField('Email', [validators.Length(min=6, max=50)])
     role = SelectField('Role', choices=[('1', 'Admin'), ('2', 'Teacher'), ('3', 'Student')])
@@ -237,8 +238,8 @@ class UserRegisterForm(Form):
 def user_registration():
     form = UserRegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        name = form.name.data
-        # last_name = form.last_name.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
         email = form.email.data
         username = form.username.data
         role = form.role.data
@@ -248,8 +249,8 @@ def user_registration():
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO users(name, email, username, password, role_id) VALUES(%s, %s, %s, %s, %s);",
-                    (name, email, username, password, role))
+        cur.execute("INSERT INTO users(first_name, last_name, email, username, password, role_id) VALUES(%s, %s, %s, %s, %s, %s);",
+                    (first_name, last_name, email, username, password, role))
 
         # Commit to DB
         mysql.connection.commit()
@@ -262,6 +263,55 @@ def user_registration():
         redirect(url_for('admin_dashboard'))
 
     return render_template('user_registration.html', form=form)
+
+
+# Edit article
+@app.route('/edit_user/<string:user_id>', methods=['GET', 'POST'])
+@admin_logged_in
+def edit_article(user_id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Get article by id
+    result = cur.execute("SELECT * FROM users WHERE id = %s", [user_id])
+    user = cur.fetchone()
+    cur.close()
+
+    # Get form
+    form = UserRegisterForm(request.form)
+
+    # populate article form fields
+    form.first_name.data = user['first_name']
+    form.last_name.data = user['last_name']
+    form.email.data = user['email']
+    form.username.data = user['username']
+    form.role.data = str(user['role_id'])
+    ###
+    if request.method == 'POST' and form.validate():
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        username = request.form['username']
+        role = request.form['role']
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("UPDATE users SET first_name=%s, last_name=%s, email=%s, username=%s, role_id=%s WHERE id=%s",
+                    (first_name, last_name, email, username, role, user_id))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('User Updated', 'success')
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('edit_user.html', form=form)
 
 
 # Register Form

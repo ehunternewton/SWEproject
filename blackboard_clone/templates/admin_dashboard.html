@@ -2,15 +2,15 @@
 
 {% block body %}
     <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
-    <a class="btn btn-success" href="/create_course">Create Course</a>
-    <a class="btn btn-success" href="/course_registration">Course Registration</a>
-    <a class="btn btn-success" href="/user_registration">User Registration</a>
+    <a class="btn btn-info" href="/create_course">Create Course</a>
+    <a class="btn btn-info" href="/course_registration">Course Registration</a>
+    <a class="btn btn-info" href="/user_registration">User Registration</a>
 
     <hr>
 
     <h2>Students</h2>
     <table class="table table-striped">
-        <tr>
+        <tr class="table-info">
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -41,7 +41,7 @@
 
     <h2>Teachers</h2>
     <table class="table table-striped">
-        <tr>
+        <tr class="table-info">
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -72,7 +72,7 @@
 
     <h2>Administrators</h2>
     <table class="table table-striped">
-        <tr>
+        <tr class="table-info">
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>

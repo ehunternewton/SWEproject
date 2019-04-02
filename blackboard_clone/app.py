@@ -285,8 +285,9 @@ def edit_article(user_id):
     form.last_name.data = user['last_name']
     form.email.data = user['email']
     form.username.data = user['username']
+    # role_id is an int, the form requires a string
     form.role.data = str(user['role_id'])
-    ###
+
     if request.method == 'POST' and form.validate():
         first_name = request.form['first_name']
         last_name = request.form['last_name']

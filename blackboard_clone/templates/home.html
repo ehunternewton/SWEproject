@@ -6,12 +6,13 @@
         <p class="lead">A simple website built with the Python Flask framework, where you can keep up with your courses
         online</p>
         {% if session.admin_logged_in == NULL %}
-            <a href="/student_login" class="btn btn-success">Log In</a>
+            <a href="/student_login" class="btn btn-info">Log In</a>
         {% endif %}
     </div>
     <div>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/sAkL2-vh2Sk?rel=0;&autoplay=1&mute=1" frameborder="0" allowfullscreen include></iframe>
-
-{#    <iframe width="560" height="315" src="https://www.youtube.com/embed/sAkL2-vh2Sk?autoplay=1&start=3" frameborder="0" allow="accelerometer; autoplay=1; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>#}
+        <iframe style="position: absolute; margin: auto; top: 70%; left: 50%; transform: translate(-50%, -50%);"
+            width="560" height="315" src="https://www.youtube.com/embed/sAkL2-vh2Sk?rel=0;&autoplay=1&mute=1"
+            frameborder="0" allowfullscreen include>
+        </iframe>
     </div>
 {% endblock %}

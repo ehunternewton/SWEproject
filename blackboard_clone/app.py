@@ -53,7 +53,7 @@ def login():
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
-                # Passed
+                # Passed, set session and redirect to correct dashboard
                 session['username'] = username
                 if role == 1:
                     session['admin_logged_in'] = True
@@ -139,9 +139,13 @@ def admin_dashboard():
     # Get admins
     cur.execute("SELECT * FROM users WHERE role_id = 1")
     admins = cur.fetchall()
+    # Get course catalog
+    cur.execute("SELECT * FROM course_details")
+    course_details = cur.fetchall()
     # Close connection
     cur.close()
-    return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins)
+    return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins,
+                           course_details=course_details)
 
 
 # Logout
@@ -265,8 +269,8 @@ def delete_user(user_id):
 
 # Register Form
 class CourseCreationForm(Form):
-    course_name = StringField('Name', [validators.Length(min=1, max=100)])
-    course_description = StringField('Username', [validators.Length(min=4, max=255)])
+    course_name = StringField('Course Name', [validators.Length(min=1, max=100)])
+    course_description = StringField('Course Description', [validators.Length(min=4, max=255)])
 
 
 @app.route('/create_course', methods=['GET', 'POST'])
@@ -281,7 +285,7 @@ def create_course():
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO courses(course_name, course_description) VALUES(%s, %s);",
+        cur.execute("INSERT INTO course_details(course_name, course_description) VALUES(%s, %s);",
                     (course_name, course_description))
 
         # Commit to DB

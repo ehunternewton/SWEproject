@@ -26,7 +26,7 @@
                 <td>{{ student.last_name }}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
-                <td><a href=edit_user/{{ student.id }}" class="btn btn-light float-right">Edit</a></td>
+                <td><a href="edit_user/{{ student.id }}" class="btn btn-light float-right">Edit</a></td>
                 <td>
                     <form action="{{ url_for('delete_user', user_id=student.id) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
@@ -57,7 +57,7 @@
                 <td>{{ teacher.last_name }}</td>
                 <td>{{ teacher.username }}</td>
                 <td>{{ teacher.email }}</td>
-                <td><a href=edit_user/{{ teacher.id }}" class="btn btn-light float-right">Edit</a></td>
+                <td><a href="edit_user/{{ teacher.id }}" class="btn btn-light float-right">Edit</a></td>
                 <td>
                     <form action="{{ url_for('delete_user', user_id=teacher.id) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
@@ -88,7 +88,7 @@
                 <td>{{ admin.last_name }}</td>
                 <td>{{ admin.username }}</td>
                 <td>{{ admin.email }}</td>
-                <td><a href=edit_user/{{ admin.id }}" class="btn btn-light float-right">Edit</a></td>
+                <td><a href="edit_user/{{ admin.id }}" class="btn btn-light float-right">Edit</a></td>
                 <td>
                     <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
@@ -98,6 +98,34 @@
             </tr>
         {% endfor %}
     </table>
+    <hr>
+    <h2>Course Catalog</h2>
+    <table class="table table-striped">
+        <tr class="table-info">
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Course Description</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for course in course_details %}
+            <tr>
+                <td>{{ course.id }}</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.course_description }}</td>
+                <td><a href="#" class="btn btn-light float-right">Edit</a></td>
+{#                <td>#}
+{#                    <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">#}
+{#                        <input type="hidden" name="_method" value="DELETE">#}
+{#                        <input type="submit" value="Delete" class="btn btn-danger">#}
+{#                    </form>#}
+{#                </td>#}
+            </tr>
+        {% endfor %}
+    </table>
+    <hr>
+    <h2>Available Courses</h2>
+
 
 
 {% endblock %}

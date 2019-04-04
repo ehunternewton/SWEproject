@@ -32,8 +32,8 @@ def index():
     return render_template('home.html')
 
 
-@app.route('/student_login', methods=['GET', 'POST'])
-def student_login():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
         # Get Form Fields
         username = request.form['username']
@@ -43,30 +43,40 @@ def student_login():
         cur = mysql.connection.cursor()
 
         # Get user by username
-        result = cur. execute("SELECT * FROM users WHERE username = %s and role_id = 3", [username])
+        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
 
         if result > 0:
             # Get stored hash
             data = cur.fetchone()
             password = data['password']
+            role = data['role_id']
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Passed
-                session['student_logged_in'] = True
                 session['username'] = username
-
-                flash('You are now logged in', 'success')
-                return redirect(url_for('student_dashboard'))
+                if role == 1:
+                    session['admin_logged_in'] = True
+                    flash('You are now logged in', 'success')
+                    return redirect(url_for('admin_dashboard'))
+                elif role == 2:
+                    session['teacher_logged_in'] = True
+                    flash('You are now logged in', 'success')
+                    return redirect(url_for('teacher_dashboard'))
+                elif role == 3:
+                    session['student_logged_in'] = True
+                    flash('You are now logged in', 'success')
+                    return redirect(url_for('student_dashboard'))
+                session['username'] = username
             else:
                 error = 'Invalid login'
-                return render_template('student_login.html', error=error)
+                return render_template('login.html', error=error)
             # Close connection
             cur.close()
         else:
             error = 'Username not found'
-            return render_template('student_login.html', error=error)
-    return render_template('student_login.html')
+            return render_template('login.html', error=error)
+    return render_template('login.html')
 
 
 def student_logged_in(f):
@@ -86,43 +96,6 @@ def student_dashboard():
     return render_template('student_dashboard.html')
 
 
-@app.route('/teacher_login', methods=['GET', 'POST'])
-def teacher_login():
-    if request.method == 'POST':
-        # Get Form Fields
-        username = request.form['username']
-        password_candidate = request.form['password']
-
-        # Create cursor
-        cur = mysql.connection.cursor()
-
-        # Get user by username
-        result = cur. execute("SELECT * FROM users WHERE username = %s and role_id = 2", [username])
-
-        if result > 0:
-            # Get stored hash
-            data = cur.fetchone()
-            password = data['password']
-
-            # Compare Passwords
-            if sha256_crypt.verify(password_candidate, password):
-                # Passed
-                session['teacher_logged_in'] = True
-                session['username'] = username
-
-                flash('You are now logged in', 'success')
-                return redirect(url_for('teacher_dashboard'))
-            else:
-                error = 'Invalid login'
-                return render_template('teacher_login.html', error=error)
-            # Close connection
-            cur.close()
-        else:
-            error = 'Username not found'
-            return render_template('student_login.html', error=error)
-    return render_template('teacher_login.html')
-
-
 def teacher_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -138,45 +111,6 @@ def teacher_logged_in(f):
 @teacher_logged_in
 def teacher_dashboard():
     return render_template('teacher_dashboard.html')
-
-
-@app.route('/admin_login', methods=['GET', 'POST'])
-def admin_login():
-
-    if request.method == 'POST':
-        # Get Form Fields
-        username = request.form['username']
-        password_candidate = request.form['password']
-
-        # Create cursor
-        cur = mysql.connection.cursor()
-
-        # Get user by username
-        result = cur. execute("SELECT * FROM users WHERE username = %s and role_id = 1", [username])
-
-        if result > 0:
-            # Get stored hash
-            data = cur.fetchone()
-            password = data['password']
-
-            # Compare Passwords
-            if sha256_crypt.verify(password_candidate, password):
-                # Passed
-                session['admin_logged_in'] = True
-                session['username'] = username
-
-                flash('You are now logged in', 'success')
-                return redirect(url_for('admin_dashboard'))
-            else:
-                error = 'Invalid login'
-                return render_template('admin_login.html', error=error)
-            # Close connection
-            cur.close()
-        else:
-            error = 'Username not found'
-            return render_template('admin_login.html', error=error)
-
-    return render_template('admin_login.html')
 
 
 def admin_logged_in(f):

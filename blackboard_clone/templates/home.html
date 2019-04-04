@@ -5,8 +5,8 @@
         <h1>Welcome to xMenAcademy!</h1>
         <p class="lead">A simple website built with the Python Flask framework, where you can keep up with your courses
         online</p>
-        {% if session.admin_logged_in == NULL %}
-            <a href="/student_login" class="btn btn-info">Log In</a>
+        {% if session.admin_logged_in == NULL and session.student_logged_in == NULL and session.teacher_logged_in == NULL%}
+            <a href="/login" class="btn btn-info">Sign In</a>
         {% endif %}
     </div>
     <div>

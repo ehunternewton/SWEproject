@@ -301,6 +301,45 @@ def create_course():
     return render_template('create_course.html', form=form)
 
 
+@app.route('/edit_course/<string:course_id>', methods=['GET', 'POST'])
+@admin_logged_in
+def edit_course(course_id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+
+    # Get article by id
+    result = cur.execute("SELECT * FROM course_details WHERE id = %s", [course_id])
+    course = cur.fetchone()
+    cur.close()
+
+    form = CourseCreationForm(request.form)
+    form.course_name.data = course['course_name']
+    form.course_description.data = course['course_description']
+
+    if request.method == 'POST' and form.validate():
+        course_name = request.form['course_name']
+        course_description = request.form['course_description']
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("UPDATE course_details SET course_name=%s, course_description=%s WHERE id=%s;",
+                    (course_name, course_description,course_id))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('Course updated!', 'success')
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('edit_course.html', form=form)
+
+
 app.secret_key = 'secret123'
 if __name__ == '__main__':
     app.run()

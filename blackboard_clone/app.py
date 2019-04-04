@@ -268,7 +268,7 @@ def user_registration():
 # Edit article
 @app.route('/edit_user/<string:user_id>', methods=['GET', 'POST'])
 @admin_logged_in
-def edit_article(user_id):
+def edit_user(user_id):
     # Create cursor
     cur = mysql.connection.cursor()
 
@@ -313,6 +313,20 @@ def edit_article(user_id):
         return redirect(url_for('admin_dashboard'))
 
     return render_template('edit_user.html', form=form)
+
+
+@app.route('/delete_user/<string:user_id>', methods=['POST'])
+@admin_logged_in
+def delete_user(user_id):
+    cur = mysql.connection.cursor()
+
+    cur.execute("DELETE FROM users WHERE id = %s", [user_id])
+
+    mysql.connection.commit()
+    cur.close()
+
+    flash('User Deleted', 'success')
+    return redirect(url_for('admin_dashboard'))
 
 
 # Register Form

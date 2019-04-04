@@ -236,6 +236,7 @@ def add_article():
 
     return render_template('add_article.html', form=form)
 
+
 # Edit article
 @app.route('/edit_article/<string:id>', methods=['GET', 'POST'])
 @is_logged_in

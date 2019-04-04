@@ -339,6 +339,19 @@ def edit_course(course_id):
 
     return render_template('edit_course.html', form=form)
 
+@app.route('/delete_course/<string:course_id>', methods=['POST'])
+@admin_logged_in
+def delete_course(course_id):
+    cur = mysql.connection.cursor()
+
+    cur.execute("DELETE FROM course_details WHERE id = %s", [course_id])
+
+    mysql.connection.commit()
+    cur.close()
+
+    flash('Course Deleted', 'success')
+    return redirect(url_for('admin_dashboard'))
+
 
 app.secret_key = 'secret123'
 if __name__ == '__main__':

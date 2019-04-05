@@ -143,7 +143,10 @@ def admin_dashboard():
     cur.execute("SELECT * FROM course_details")
     course_details = cur.fetchall()
     # Get available courses
-    cur.execute("SELECT * FROM courses")
+    cur.execute("SELECT c.id, c.semester_name, cd.course_name, u.first_name, u.last_name " +
+                "FROM courses c " +
+                "INNER JOIN course_details cd on c.course_details_id = cd.id " +
+                "INNER JOIN users u on c.teacher_id = u.id")
     courses = cur.fetchall()
     # Close connection
     cur.close()
@@ -388,7 +391,7 @@ def course_registration():
 
         flash('Course registered!', 'success')
 
-        redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_dashboard'))
 
     return render_template('course_registration.html', form=form)
 
@@ -412,7 +415,7 @@ def student_course_registration():
 
         # Execute
         cur.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
-                    (student_id, course_id))
+                    (int(student_id), int(course_id)))
 
         # Commit to DB
         mysql.connection.commit()
@@ -422,7 +425,7 @@ def student_course_registration():
 
         flash('Student registered in the course!', 'success')
 
-        redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_dashboard'))
 
     return render_template('student_course_registration.html', form=form)
 

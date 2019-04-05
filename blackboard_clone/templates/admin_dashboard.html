@@ -2,8 +2,8 @@
 
 {% block body %}
 
-    <ul class="nav flex-column" style="position:absolute;top:130px;left:92px">
-        <li class="nav-item animated pulse" style="margin-bottom: 2px;width: 220px">
+    <ul class="nav flex-column" style="position:absolute;top:138px;left:42px">
+        <li class="nav-item animated pulse" style="margin-bottom: 2px;width: 320px">
             <a style="text-align: right;" class="btn btn-info btn-block" href="/create_course"><i
                     class="fas fa-chalkboard float-left"></i>Create Course</a>
         </li>
@@ -148,8 +148,8 @@
     <table class="table table-striped table-sm">
         <tr class="table-info">
             <th style="width:  5%">ID</th>
-            <th style="width:  15%">Course Catalog ID</th>
-            <th style="width:  20%">Teacher ID</th>
+            <th style="width:  15%">Course Catalog Name</th>
+            <th style="width:  20%">Teacher</th>
             <th style="width:  25%">Semester</th>
             <th style="width:  10%"></th>
             <th style="width:  10%"></th>
@@ -157,8 +157,8 @@
         {% for course in courses %}
             <tr>
                 <td>{{ course.id }}</td>
-                <td>{{ course.course_details_id }}</td>
-                <td>{{ course.teacher_id }}</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.first_name }} {{ course.last_name }}</td>
                 <td>{{ course.semester_name }}</td>
 {#                <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>#}
 {#                <td>#}

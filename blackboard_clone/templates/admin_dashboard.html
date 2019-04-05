@@ -9,7 +9,11 @@
         </li>
         <li class="nav-item animated pulse" style="margin-bottom: 2px">
             <a style="text-align: right;" class="btn btn-info btn-block" href="/course_registration"><i
-                    class="fas fa-chalkboard-teacher float-left"></i>Course Registration</a>
+                    class="fas fa-chalkboard-teacher float-left"></i>Teacher Course Registration</a>
+        </li>
+        <li class="nav-item animated pulse" style="margin-bottom: 2px">
+            <a style="text-align: right;" class="btn btn-info btn-block" href="/student_course_registration"><i
+                    class="fas fa-chalkboard-teacher float-left"></i>Student Course Registration</a>
         </li>
         <li class="nav-item animated pulse" style="margin-bottom: 2px">
             <a style="text-align: right;" class="btn btn-info btn-block" href="/user_registration"><i
@@ -18,12 +22,16 @@
     </ul>
 
     <h1 class="animated flipInX">Dashboard <small>Welcome {{ session.username }}</small></h1>
-{#    <a class="btn btn-info" href="/create_course">Create Course</a>#}
-{#    <a class="btn btn-info" href="/course_registration">Course Registration</a>#}
-{#    <a class="btn btn-info" href="/user_registration">User Registration</a>#}
+
+{#    <hr>#}
+{#    <a class="btn btn-info" style="margin-bottom: 2px" href="/user_registration">User Registration</a>#}
+{#    <a class="btn btn-info" style="margin-bottom: 2px" href="/create_course">Create Course</a>#}
+{#    <a class="btn btn-info" style="margin-bottom: 2px" href="/course_registration">Teacher Course Registration</a>#}
+{#    <a class="btn btn-info" style="margin-bottom: 2px" href="/student_course_registration">Student Course Registration</a>#}
+
 
     <hr>
-
+    <div>
     <h2>Students</h2>
     <table class="table table-striped table-sm">
         <tr class="table-info">
@@ -52,7 +60,7 @@
             </tr>
         {% endfor %}
     </table>
-
+    </div>
     <h2>Teachers</h2>
     <table class="table table-striped table-sm">
         <tr class="table-info">
@@ -127,17 +135,41 @@
                 <td>{{ course.course_description }}</td>
                 <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>
                 <td>
-{#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
-{#                        <input type="hidden" name="_method" value="DELETE">#}
-{#                        <input type="submit" value="Delete" class="btn btn-danger">#}
-{#                    </form>#}
+                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                    </form>
                 </td>
             </tr>
         {% endfor %}
     </table>
-
+    <hr>
     <h2>Available Courses</h2>
-
+    <table class="table table-striped table-sm">
+        <tr class="table-info">
+            <th style="width:  5%">ID</th>
+            <th style="width:  15%">Course Catalog ID</th>
+            <th style="width:  20%">Teacher ID</th>
+            <th style="width:  25%">Semester</th>
+            <th style="width:  10%"></th>
+            <th style="width:  10%"></th>
+        </tr>
+        {% for course in courses %}
+            <tr>
+                <td>{{ course.id }}</td>
+                <td>{{ course.course_details_id }}</td>
+                <td>{{ course.teacher_id }}</td>
+                <td>{{ course.semester_name }}</td>
+{#                <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>#}
+{#                <td>#}
+{#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
+{#                        <input type="hidden" name="_method" value="DELETE">#}
+{#                        <input type="submit" value="Delete" class="btn btn-danger">#}
+{#                    </form>#}
+{#                </td>#}
+            </tr>
+        {% endfor %}
+    </table>
 
 
 {% endblock %}

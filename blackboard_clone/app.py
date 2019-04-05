@@ -142,10 +142,13 @@ def admin_dashboard():
     # Get course catalog
     cur.execute("SELECT * FROM course_details")
     course_details = cur.fetchall()
+    # Get available courses
+    cur.execute("SELECT * FROM courses")
+    courses = cur.fetchall()
     # Close connection
     cur.close()
     return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins,
-                           course_details=course_details)
+                           course_details=course_details, courses=courses)
 
 
 # Logout
@@ -339,6 +342,7 @@ def edit_course(course_id):
 
     return render_template('edit_course.html', form=form)
 
+
 @app.route('/delete_course/<string:course_id>', methods=['POST'])
 @admin_logged_in
 def delete_course(course_id):
@@ -351,6 +355,76 @@ def delete_course(course_id):
 
     flash('Course Deleted', 'success')
     return redirect(url_for('admin_dashboard'))
+
+
+# Register Form
+class CourseRegisterForm(Form):
+    course_details_id = StringField('Course Catalog ID', [validators.Length(min=1, max=100)])
+    teacher_id = StringField('Teacher ID', [validators.Length(min=1, max=255)])
+    semester_name = StringField('Semester', [validators.Length(min=1, max=255)])
+
+
+@app.route('/course_registration', methods=['GET', 'POST'])
+@admin_logged_in
+def course_registration():
+    form = CourseRegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        course_details_id = form.course_details_id.data
+        teacher_id = form.teacher_id.data
+        semester_name = form.semester_name.data
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("INSERT INTO courses(course_details_id, teacher_id, semester_name) VALUES(%s, %s, %s);",
+                    (course_details_id, teacher_id, semester_name))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('Course registered!', 'success')
+
+        redirect(url_for('admin_dashboard'))
+
+    return render_template('course_registration.html', form=form)
+
+
+# Register Form
+class StudentCourseRegisterForm(Form):
+    student_id = StringField('Course ID', [validators.Length(min=1, max=100)])
+    course_id = StringField('Student ID', [validators.Length(min=1, max=255)])
+
+
+@app.route('/student_course_registration', methods=['GET', 'POST'])
+@admin_logged_in
+def student_course_registration():
+    form = StudentCourseRegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        student_id = form.student_id.data
+        course_id = form.course_id.data
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
+                    (student_id, course_id))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('Student registered in the course!', 'success')
+
+        redirect(url_for('admin_dashboard'))
+
+    return render_template('student_course_registration.html', form=form)
 
 
 app.secret_key = 'secret123'

@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <h1>Grade Book <small>for {{ course[0].course_name }}</small></h1>
+
+    <hr>
+    <table class="table table-striped">
+        <tr>
+            <th>Course</th>
+            <th>Student First Name</th>
+            <th>Last Name</th>
+            <th>course_gpa</th>
+            <th>exam 1</th>
+            <th>exam 2</th>
+            <th>final</th>
+        </tr>
+     {% for course in course %}
+            <tr>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.first_name }}</td>
+                <td>{{ course.last_name }}</td>
+                <td>{{ course.course_gpa }}</td>
+                <td>{{ course.exam_1 }}</td>
+                <td>{{ course.exam_2 }}</td>
+                <td>{{ course.final }}</td>
+                <td ><a href="#" class="btn btn-light float-right">Edit</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

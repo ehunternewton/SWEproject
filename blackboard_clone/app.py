@@ -122,6 +122,20 @@ def teacher_dashboard():
     return render_template('teacher_dashboard.html', courses=courses)
 
 
+@app.route('/gradebook/<string:course_id>', methods=['GET', 'POST'])
+@teacher_logged_in
+def gradebook(course_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT cd.course_name, u.first_name, u.last_name, cr.id, cr.course_gpa, cr.exam_1, cr.exam_2, cr.final "
+                "FROM course_registration cr "
+                "INNER JOIN users u on cr.student_id = u.id "
+                "INNER JOIN courses c on cr.course_id = c.id "
+                "INNER JOIN course_details cd on c.course_details_id = cd.id "
+                "WHERE course_id = %s;", [course_id])
+    course = cur.fetchall()
+    return render_template('gradebook.html', course=course)
+
+
 def admin_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):

@@ -4,14 +4,28 @@
     <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
 
     <hr>
+    <h2>Your Courses</h2>
     <table class="table table-striped">
         <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Date</th>
+            <th>CRN</th>
+            <th>Course</th>
+            <th>Semester</th>
+            <th></th>
             <th></th>
             <th></th>
         </tr>
-    </table>
+     {% for course in courses %}
+            <tr>
+                <td>{{ course.id }}</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.semester_name }}</td>
+{#                <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>#}
+{#                <td>#}
+{#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
+{#                        <input type="hidden" name="_method" value="DELETE">#}
+{#                        <input type="submit" value="Delete" class="btn btn-danger">#}
+{#                    </form>#}
+{#                </td>#}
+            </tr>
+        {% endfor %}
 {% endblock %}

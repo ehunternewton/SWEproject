@@ -50,11 +50,13 @@ def login():
             data = cur.fetchone()
             password = data['password']
             role = data['role_id']
+            user_id = data['id']
 
             # Compare Passwords
             if sha256_crypt.verify(password_candidate, password):
                 # Passed, set session and redirect to correct dashboard
                 session['username'] = username
+                session['user_id'] = user_id
                 if role == 1:
                     session['admin_logged_in'] = True
                     flash('You are now logged in', 'success')
@@ -67,7 +69,7 @@ def login():
                     session['student_logged_in'] = True
                     flash('You are now logged in', 'success')
                     return redirect(url_for('student_dashboard'))
-                session['username'] = username
+                # session['username'] = username
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
@@ -110,7 +112,14 @@ def teacher_logged_in(f):
 @app.route('/teacher_dashboard', methods=['GET', 'POST'])
 @teacher_logged_in
 def teacher_dashboard():
-    return render_template('teacher_dashboard.html')
+    cur = mysql.connection.cursor()
+    # Get available courses
+    cur.execute("SELECT c.id, c.semester_name, cd.course_name FROM courses c " +
+                "INNER JOIN course_details cd on c.course_details_id = cd.id " +
+                "WHERE teacher_id = %s;", (session['user_id'],))
+    courses = cur.fetchall()
+    cur.close()
+    return render_template('teacher_dashboard.html', courses=courses)
 
 
 def admin_logged_in(f):

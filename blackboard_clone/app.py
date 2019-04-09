@@ -26,11 +26,82 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MySQL
 mysql = MySQL(app)
 
+class Admin:
+    def __init__(self, admin_firstName, admin_lastName, admin_userID):
+        self.admin_firstName = admin_firstName
+        self.admin_lastName = admin_lastName
+        self.admin_userID = admin_userID
+    def createUser(self, student_firstName, student_lastName, student_userID):
+        pass
+    def removeUser(self):
+        pass
+    def createProfessor(self, professor_firstName, professor_lastName, professor_userID):
+        pass
+    def removeProfessor(self):
+        pass
+    def registerCourse(self, course_name, course_id, course_semester):
+        pass
+    def removeCourse(self):
+        pass
+    def modifyCourse(self):
+        pass
+    def login(self):
+        pass
+    def logout(self):
+        pass
 
+
+class Teacher:
+    def __init__(self, professor_firstName, professor_lastName, professor_userID):
+        self.professor_firstName = professor_firstName
+        self.professor_lastName = professor_lastName
+        self.professor_userID = professor_userID
+    def addCourse(self, course_name, course_id, course_semester):
+        pass
+    def removeCourse(self):
+        pass
+    def addGrade(self):
+        pass
+    def removeGrade(self):
+        pass
+    def modifyGrade(self):
+        pass
+    def login(self):
+        pass
+    def logout(self):
+        pass
+
+class Student:
+    def __init__(self, student_firstName, student_lastName, student_userID, student_gpa):
+        self.student_firstName = student_firstName
+        self.student_lastName = student_lastName
+        self.student_userID = student_userID
+        self.student_gpa = student_gpa
+    def viewGrades(self):
+        pass
+    def viewCourses(self):
+        pass
+    def login(self):
+        pass
+    def logout(self):
+        pass
+
+class Course:
+    def __init__(self, course_name, course_id, course_semester):
+        self.course_name = course_name
+        self.course_id = course_id
+        self.course_semester = course_semester
+    def calculateGrades(self):
+        pass
+    def login(self):
+        pass
+    def logout(self):
+        pass
+
+# Home page
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('home.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,7 +149,6 @@ def login():
             return render_template('login.html', error=error)
     return render_template('login.html')
 
-
 def student_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -89,12 +159,10 @@ def student_logged_in(f):
             return redirect(url_for('student_login'))
     return wrap
 
-
 @app.route('/student_dashboard', methods=['GET', 'POST'])
 @student_logged_in
 def student_dashboard():
     return render_template('student_dashboard.html')
-
 
 def teacher_logged_in(f):
     @wraps(f)
@@ -106,12 +174,10 @@ def teacher_logged_in(f):
             return redirect(url_for('teacher_login'))
     return wrap
 
-
 @app.route('/teacher_dashboard', methods=['GET', 'POST'])
 @teacher_logged_in
 def teacher_dashboard():
     return render_template('teacher_dashboard.html')
-
 
 def admin_logged_in(f):
     @wraps(f)
@@ -122,7 +188,6 @@ def admin_logged_in(f):
             flash('Unauthorized, Please Login', 'danger')
             return redirect(url_for('admin_login'))
     return wrap
-
 
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 @admin_logged_in
@@ -153,7 +218,6 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins,
                            course_details=course_details, courses=courses)
 
-
 # Logout
 @app.route('/logout')
 #  @is_logged_in
@@ -161,7 +225,6 @@ def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('index'))
-
 
 # Register Form
 class UserRegisterForm(Form):
@@ -175,7 +238,6 @@ class UserRegisterForm(Form):
     #     validators.EqualTo('confirm', message='Passwords do not match')
     # ])
     # confirm = PasswordField('Confirm Password')
-
 
 @app.route('/user_registration', methods=['GET', 'POST'])
 @admin_logged_in
@@ -207,7 +269,6 @@ def user_registration():
         redirect(url_for('admin_dashboard'))
 
     return render_template('user_registration.html', form=form)
-
 
 # Edit article
 @app.route('/edit_user/<string:user_id>', methods=['GET', 'POST'])
@@ -258,7 +319,6 @@ def edit_user(user_id):
 
     return render_template('edit_user.html', form=form)
 
-
 @app.route('/delete_user/<string:user_id>', methods=['POST'])
 @admin_logged_in
 def delete_user(user_id):
@@ -272,12 +332,10 @@ def delete_user(user_id):
     flash('User Deleted', 'success')
     return redirect(url_for('admin_dashboard'))
 
-
 # Register Form
 class CourseCreationForm(Form):
     course_name = StringField('Course Name', [validators.Length(min=1, max=100)])
     course_description = StringField('Course Description', [validators.Length(min=4, max=255)])
-
 
 @app.route('/create_course', methods=['GET', 'POST'])
 @admin_logged_in
@@ -305,7 +363,6 @@ def create_course():
         redirect(url_for('admin_dashboard'))
 
     return render_template('create_course.html', form=form)
-
 
 @app.route('/edit_course/<string:course_id>', methods=['GET', 'POST'])
 @admin_logged_in
@@ -345,7 +402,6 @@ def edit_course(course_id):
 
     return render_template('edit_course.html', form=form)
 
-
 @app.route('/delete_course/<string:course_id>', methods=['POST'])
 @admin_logged_in
 def delete_course(course_id):
@@ -359,13 +415,11 @@ def delete_course(course_id):
     flash('Course Deleted', 'success')
     return redirect(url_for('admin_dashboard'))
 
-
 # Register Form
 class CourseRegisterForm(Form):
     course_details_id = StringField('Course Catalog ID', [validators.Length(min=1, max=100)])
     teacher_id = StringField('Teacher ID', [validators.Length(min=1, max=255)])
     semester_name = StringField('Semester', [validators.Length(min=1, max=255)])
-
 
 @app.route('/course_registration', methods=['GET', 'POST'])
 @admin_logged_in
@@ -395,12 +449,10 @@ def course_registration():
 
     return render_template('course_registration.html', form=form)
 
-
 # Register Form
 class StudentCourseRegisterForm(Form):
     student_id = StringField('Course ID', [validators.Length(min=1, max=100)])
     course_id = StringField('Student ID', [validators.Length(min=1, max=255)])
-
 
 @app.route('/student_course_registration', methods=['GET', 'POST'])
 @admin_logged_in
@@ -428,7 +480,6 @@ def student_course_registration():
         return redirect(url_for('admin_dashboard'))
 
     return render_template('student_course_registration.html', form=form)
-
 
 app.secret_key = 'secret123'
 if __name__ == '__main__':

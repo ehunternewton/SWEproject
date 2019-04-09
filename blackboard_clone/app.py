@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from flask_mysqldb import MySQL
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, DecimalField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -126,14 +126,77 @@ def teacher_dashboard():
 @teacher_logged_in
 def gradebook(course_id):
     cur = mysql.connection.cursor()
-    cur.execute("SELECT cd.course_name, u.first_name, u.last_name, cr.id, cr.course_gpa, cr.exam_1, cr.exam_2, cr.final "
-                "FROM course_registration cr "
+    cur.execute("SELECT cd.course_name, u.first_name, u.last_name, cr.id, cr.course_gpa, cr.exam_1, cr.exam_2, cr.final"
+                " FROM course_registration cr "
                 "INNER JOIN users u on cr.student_id = u.id "
                 "INNER JOIN courses c on cr.course_id = c.id "
                 "INNER JOIN course_details cd on c.course_details_id = cd.id "
                 "WHERE course_id = %s;", [course_id])
     course = cur.fetchall()
+    cur.close()
     return render_template('gradebook.html', course=course)
+
+
+class UpdateGradesForm(Form):
+    exam_1 = DecimalField('Exam 1',  [validators.optional()])
+    exam_2 = DecimalField('Exam 2', [validators.optional()])
+    final = DecimalField('Final', [validators.optional()])
+
+
+@app.route('/gradebook/update_grades/<string:course_registration_id>', methods=['GET', 'POST'])
+@teacher_logged_in
+def update_grades(course_registration_id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM course_registration WHERE id = %s;", [course_registration_id])
+    result = cur.fetchone()
+    cur.close()
+
+    # Get form
+    form = UpdateGradesForm(request.form)
+
+    # populate form fields
+    form.exam_1.data = result['exam_1']
+    form.exam_2.data = result['exam_2']
+    form.final.data = result['final']
+
+    if request.method == 'POST' and form.validate():
+        exam_1 = request.form['exam_1']
+        exam_2 = request.form['exam_2']
+        final = request.form['final']
+        gpa = 0.0
+
+        if exam_1 != "" and exam_2 != "" and final != "":
+            # calculate GPA
+            average = (float(exam_1) + float(exam_2) + float(final)) / 3
+            if average > 89.5:
+                gpa = 4.0
+            elif average > 79.5:
+                gpa = 3.0
+            elif average > 69.5:
+                gpa = 2.0
+            elif average > 59.5:
+                gpa = 1.0
+            else:
+                gpa = 0.0
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("UPDATE course_registration SET course_gpa=%s, exam_1=%s, exam_2=%s, final=%s WHERE id=%s",
+                    (gpa, exam_1, exam_2, final, course_registration_id))
+
+        # Commit to DB
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('Grades Updated', 'success')
+
+        return redirect(url_for('teacher_dashboard'))
+
+    return render_template('update_grades.html', form=form)
 
 
 def admin_logged_in(f):
@@ -232,7 +295,7 @@ def user_registration():
     return render_template('user_registration.html', form=form)
 
 
-# Edit article
+# Edit user
 @app.route('/edit_user/<string:user_id>', methods=['GET', 'POST'])
 @admin_logged_in
 def edit_user(user_id):

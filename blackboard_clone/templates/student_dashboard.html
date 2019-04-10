@@ -5,13 +5,25 @@
 
     <hr>
     <table class="table table-striped">
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Date</th>
-            <th></th>
-            <th></th>
+        <tr class="table-info">
+            <th>Course</th>
+            <th>Teacher</th>
+            <th>Semester</th>
+            <th>Exam 1</th>
+            <th>Exam 2</th>
+            <th>Final</th>
+            <th>Course GPA</th>
         </tr>
+    {% for course in courses %}
+            <tr>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.first_name }} {{ course.last_name }}</td>
+                <td>{{ course.semester_name }}</td>
+                <td>{{ course.exam_1 }}</td>
+                <td>{{ course.exam_2 }}</td>
+                <td>{{ course.final }}</td>
+                <td>{{ course.course_gpa }}</td>
+            </tr>
+        {% endfor %}
     </table>
 {% endblock %}

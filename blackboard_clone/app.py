@@ -95,7 +95,17 @@ def student_logged_in(f):
 @app.route('/student_dashboard', methods=['GET', 'POST'])
 @student_logged_in
 def student_dashboard():
-    return render_template('student_dashboard.html')
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT cr.course_gpa, cr.exam_1, cr.exam_2, cr.final, cd.course_name, c.semester_name, "
+                "u.first_name, u.last_name "
+                "FROM course_registration cr "
+                "INNER JOIN courses c ON cr.course_id = c.id "
+                "INNER JOIN course_details cd ON c.course_details_id = cd.id "
+                "INNER JOIN users u ON c.teacher_id = u.id "
+                "WHERE student_id = %s;", [session['user_id']])
+    courses = cur.fetchall()
+
+    return render_template('student_dashboard.html', courses=courses)
 
 
 def teacher_logged_in(f):

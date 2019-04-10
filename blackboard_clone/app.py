@@ -509,19 +509,30 @@ def student_course_registration():
         # Create cursor
         cur = mysql.connection.cursor()
 
-        # Execute
-        cur.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
-                    (int(student_id), int(course_id)))
+        # validate student_id is a student and course_id is a course
+        cur.execute("SELECT * FROM users WHERE id = %s AND role_id = 3", [student_id])
+        student = cur.fetchall()
 
-        # Commit to DB
-        mysql.connection.commit()
+        cur.execute("SELECT * FROM courses WHERE id = %s", [course_id])
+        course = cur.fetchall()
 
-        # Close connection
-        cur.close()
+        if len(student) > 0 and len(course) > 0:
+            # Execute
+            cur.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
+                        (int(student_id), int(course_id)))
 
-        flash('Student registered in the course!', 'success')
+            # Commit to DB
+            mysql.connection.commit()
 
-        return redirect(url_for('admin_dashboard'))
+            # Close connection
+            cur.close()
+
+            flash('Student registered in the course!', 'success')
+
+            return redirect(url_for('admin_dashboard'))
+        else:
+            error = "StudentID or CourseID does not exist"
+            return render_template('student_course_registration.html', form=form, error=error)
 
     return render_template('student_course_registration.html', form=form)
 

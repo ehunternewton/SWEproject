@@ -494,8 +494,8 @@ def course_registration():
 
 # Register Form
 class StudentCourseRegisterForm(Form):
-    student_id = StringField('Course ID', [validators.Length(min=1, max=100)])
-    course_id = StringField('Student ID', [validators.Length(min=1, max=255)])
+    student_id = StringField('Student ID', [validators.Length(min=1, max=100)])
+    course_id = StringField('Course ID', [validators.Length(min=1, max=255)])
 
 
 @app.route('/student_course_registration', methods=['GET', 'POST'])

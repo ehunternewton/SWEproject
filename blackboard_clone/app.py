@@ -1,20 +1,23 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
-from flask_mysqldb import MySQL
+# from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, DecimalField
 from passlib.hash import sha256_crypt
 from functools import wraps
+from dao import dao
 
 
 app = Flask(__name__)
+# init MySQL
+mysql = dao.loadConfig(app)
 
 
 # Config MySQL
 # aws db
-app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '12345678'
-app.config['MYSQL_DB'] = 'myflaskapp'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+# app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = '12345678'
+# app.config['MYSQL_DB'] = 'myflaskapp'
+# app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # local db
 # app.config['MYSQL_HOST'] = 'localhost'
@@ -23,8 +26,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # app.config['MYSQL_DB'] = 'xmendb'
 # app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-# init MySQL
-mysql = MySQL(app)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,15 +40,11 @@ def login():
         username = request.form['username']
         password_candidate = request.form['password']
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Get user by username
-        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+        response,data = dao.execute("SELECT * FROM users WHERE username = %s", [username],'one')
 
-        if result > 0:
+        if response > 0:
             # Get stored hash
-            data = cur.fetchone()
             password = data['password']
             role = data['role_id']
             user_id = data['id']
@@ -69,12 +66,9 @@ def login():
                     session['student_logged_in'] = True
                     flash('You are now logged in', 'success')
                     return redirect(url_for('student_dashboard'))
-                # session['username'] = username
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
-            # Close connection
-            cur.close()
         else:
             error = 'Username not found'
             return render_template('login.html', error=error)
@@ -95,17 +89,15 @@ def student_logged_in(f):
 @app.route('/student_dashboard', methods=['GET', 'POST'])
 @student_logged_in
 def student_dashboard():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT cr.course_gpa, cr.exam_1, cr.exam_2, cr.final, cd.course_name, c.semester_name, "
-                "u.first_name, u.last_name "
-                "FROM course_registration cr "
-                "INNER JOIN courses c ON cr.course_id = c.id "
-                "INNER JOIN course_details cd ON c.course_details_id = cd.id "
-                "INNER JOIN users u ON c.teacher_id = u.id "
-                "WHERE student_id = %s;", [session['user_id']])
-    courses = cur.fetchall()
+    response,data = dao.execute("SELECT cr.course_gpa, cr.exam_1, cr.exam_2, cr.final, cd.course_name, c.semester_name, "
+                                "u.first_name, u.last_name "
+                                "FROM course_registration cr "
+                                "INNER JOIN courses c ON cr.course_id = c.id "
+                                "INNER JOIN course_details cd ON c.course_details_id = cd.id "
+                                "INNER JOIN users u ON c.teacher_id = u.id "
+                                "WHERE student_id = %s;", [session['user_id']],'all')
 
-    return render_template('student_dashboard.html', courses=courses)
+    return render_template('student_dashboard.html', courses=data)
 
 
 def teacher_logged_in(f):
@@ -122,29 +114,24 @@ def teacher_logged_in(f):
 @app.route('/teacher_dashboard', methods=['GET', 'POST'])
 @teacher_logged_in
 def teacher_dashboard():
-    cur = mysql.connection.cursor()
     # Get available courses
-    cur.execute("SELECT c.id, c.semester_name, cd.course_name FROM courses c " +
+    response,data = dao.execute("SELECT c.id, c.semester_name, cd.course_name FROM courses c " +
                 "INNER JOIN course_details cd on c.course_details_id = cd.id " +
-                "WHERE teacher_id = %s;", (session['user_id'],))
-    courses = cur.fetchall()
-    cur.close()
-    return render_template('teacher_dashboard.html', courses=courses)
+                "WHERE teacher_id = %s;", (session['user_id'],), 'all')
+
+    return render_template('teacher_dashboard.html', courses=data)
 
 
 @app.route('/gradebook/<string:course_id>', methods=['GET', 'POST'])
 @teacher_logged_in
 def gradebook(course_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT cd.course_name, u.first_name, u.last_name, cr.id, cr.course_gpa, cr.exam_1, cr.exam_2, cr.final"
+    response, data = dao.execute("SELECT cd.course_name, u.first_name, u.last_name, cr.id, cr.course_gpa, cr.exam_1, cr.exam_2, cr.final"
                 " FROM course_registration cr "
                 "INNER JOIN users u on cr.student_id = u.id "
                 "INNER JOIN courses c on cr.course_id = c.id "
                 "INNER JOIN course_details cd on c.course_details_id = cd.id "
-                "WHERE course_id = %s;", [course_id])
-    course = cur.fetchall()
-    cur.close()
-    return render_template('gradebook.html', course=course)
+                "WHERE course_id = %s;", [course_id], 'all')
+    return render_template('gradebook.html', course=data)
 
 
 class UpdateGradesForm(Form):
@@ -156,18 +143,15 @@ class UpdateGradesForm(Form):
 @app.route('/gradebook/update_grades/<string:course_registration_id>', methods=['GET', 'POST'])
 @teacher_logged_in
 def update_grades(course_registration_id):
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM course_registration WHERE id = %s;", [course_registration_id])
-    result = cur.fetchone()
-    cur.close()
+    response, data = dao.execute("SELECT * FROM course_registration WHERE id = %s;", [course_registration_id], 'one')
 
     # Get form
     form = UpdateGradesForm(request.form)
 
     # populate form fields
-    form.exam_1.data = result['exam_1']
-    form.exam_2.data = result['exam_2']
-    form.final.data = result['final']
+    form.exam_1.data = data['exam_1']
+    form.exam_2.data = data['exam_2']
+    form.final.data = data['final']
 
     if request.method == 'POST' and form.validate():
         exam_1 = request.form['exam_1']
@@ -189,18 +173,10 @@ def update_grades(course_registration_id):
             else:
                 gpa = 0.0
 
-        # Create cursor
-        cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("UPDATE course_registration SET course_gpa=%s, exam_1=%s, exam_2=%s, final=%s WHERE id=%s",
-                    (gpa, exam_1, exam_2, final, course_registration_id))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        response, data = dao.execute("UPDATE course_registration SET course_gpa=%s, exam_1=%s, exam_2=%s, final=%s WHERE id=%s",
+                    (gpa, exam_1, exam_2, final, course_registration_id),'commit')
 
         flash('Grades Updated', 'success')
 

@@ -1,12 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+        <style type="text/css">
+            .table {
+            color: #e8f4ff;
+            opacity: .90;
+        }
+</style>
     <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
 
     <hr>
     <h2>Your Courses</h2>
     <table class="table table-striped">
-        <tr class="table-info">
+        <tr style="background: black">
             <th>CRN</th>
             <th>Course</th>
             <th>Semester</th>
@@ -19,7 +25,7 @@
                 <td>{{ course.id }}</td>
                 <td>{{ course.course_name }}</td>
                 <td>{{ course.semester_name }}</td>
-                <td ><a href="gradebook/{{ course.id }}" class="btn btn-light float-right">Grade Book</a></td>
+                <td ><a href="gradebook/{{ course.id }}" class="btn btn-block btn-sf">Grade Book</a></td>
 {#                <td>#}
 {#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
 {#                        <input type="hidden" name="_method" value="DELETE">#}

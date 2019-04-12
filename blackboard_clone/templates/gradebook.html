@@ -1,11 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+        <style type="text/css">
+            .table {
+            color: #e8f4ff;
+            opacity: .90;
+        }
+</style>
     <h1>Grade Book <small>for {{ course[0].course_name }}</small></h1>
 
     <hr>
     <table class="table table-striped">
-        <tr class="table-info">
+        <tr style="background: black">
             <th>Course</th>
             <th>Student First Name</th>
             <th>Last Name</th>
@@ -24,7 +30,7 @@
                 <td>{{ course.exam_1 }}</td>
                 <td>{{ course.exam_2 }}</td>
                 <td>{{ course.final }}</td>
-                <td ><a href="update_grades/{{ course.id }}" class="btn btn-light float-right">Update Grades</a></td>
+                <td ><a href="update_grades/{{ course.id }}" class="btn btn-block btn-sf">Update Grades</a></td>
             </tr>
         {% endfor %}
     </table>

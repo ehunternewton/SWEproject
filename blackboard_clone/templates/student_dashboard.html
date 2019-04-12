@@ -1,11 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <style type="text/css">
+            .table {
+            color: #e8f4ff;
+            opacity: .90;
+        }
+</style>
     <h1>Dashboard <small>Welcome {{ session.username }}</small></h1>
 
     <hr>
     <table class="table table-striped">
-        <tr class="table-info">
+        <tr style="background: black">
             <th>Course</th>
             <th>Teacher</th>
             <th>Semester</th>

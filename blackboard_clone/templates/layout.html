@@ -1,32 +1,144 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>xMenAcademy</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Exo " rel="stylesheet">
 
-      <style type="text/css">
-          body{
-              font-family: 'Exo', cursive;
-          }
-          .btn {
-        border-radius: 0;
-          }
-      </style>
-  </head>
-  <body>
-    {% include 'includes/_navbar.html' %}
-    <div class="container pt-3">
-        {% include 'includes/_messages.html' %}
+    <style type="text/css">
+
+
+body {
+    color: #e8f4ff;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    background-image: url(/static/img/xmen.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body {
+    font-family: 'Exo', cursive;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+#page-container {
+    min-width: 320px;
+    background-color: rgba(0, 22, 41, .45);
+}
+
+#page-container2 {
+    min-width: 320px;
+    background-color: rgba(0, 22, 41, .85);
+}
+
+
+#page-container:before {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    z-index: -1;
+}
+
+.btn.btn-xl {
+    padding: 14px 12px;
+    margin: 5px 5px ;
+}
+
+.btn.btn-sf {
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .75);
+    border: 2px solid rgba(255, 255, 255, .25);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    background: transparent;
+}
+
+.btn.btn-sf:hover,
+.btn.btn-sf:focus {
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 1);
+    outline: 0;
+}
+
+.btn.btn-sf:active {
+    color: #fff;
+    border-color: #fff;
+    background: rgba(255, 255, 255, .15);
+}
+
+.btn.btn-sf-red {
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .75);
+    border: 2px solid rgba(242, 38, 19, .75);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    background: transparent;
+}
+
+.btn.btn-sf-red:hover,
+.btn.btn-sf-red:focus {
+    color: rgba(255, 255, 255, 1);
+    border-color: rgba(255, 255, 255, 1);
+    outline: 0;
+}
+
+.btn.btn-sf-red:active {
+    color: #fff;
+    border-color: #fff;
+    background: rgba(255, 255, 255, .15);
+}
+.form-control{
+    background:  rgba(255, 255, 255, .15);
+    color: #e8f4ff;
+    }
+        .jumbotron{
+            background:  rgba(255, 255, 255, .15);
+        }
+
+.alert-success {
+    color: #f2f8ff;
+     background:  rgba(255, 255, 255, .15);
+    border: 2px solid rgba(22, 160, 133, .65);
+}
+.alert-danger {
+    color: #f2f8ff;
+     background:  rgba(255, 255, 255, .15);
+    border: 2px solid rgba(242, 38, 19, .75);
+}
+    </style>
+
+</head>
+
+
+<body>
+{% include 'includes/_navbar.html' %}
+<div id="page-container" class="container-fluid pt-3">
+    {% include 'includes/_messages.html' %}
+    <div id="page-container2" class="container">
         {% block body %}{% endblock %}
     </div>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
-    <script type="text/javascript">
-        CKEDITOR.replace('editor')
-    </script>
-  </body>
+
+</div>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
+<script type="text/javascript">
+    CKEDITOR.replace('editor')
+</script>
+</body>
 </html>

@@ -367,7 +367,10 @@ def edit_user(user_id):
 @admin_logged_in
 def delete_user(user_id):
     cur = mysql.connection.cursor()
-
+    cur.execute("SELECT * FROM users WHERE id = %s", [user_id])
+    user_to_delete = cur.fetchone()
+    if int(user_to_delete['role_id']) == 3:
+        cur.execute("DELETE FROM course_registration WHERE student_id = %s", [user_to_delete['id']])
     cur.execute("DELETE FROM users WHERE id = %s", [user_id])
 
     mysql.connection.commit()
@@ -502,8 +505,8 @@ def course_registration():
 
 # Register Form
 class StudentCourseRegisterForm(Form):
-    student_id = StringField('Course ID', [validators.Length(min=1, max=100)])
-    course_id = StringField('Student ID', [validators.Length(min=1, max=255)])
+    student_id = StringField('Student ID', [validators.Length(min=1, max=100)])
+    course_id = StringField('Course ID', [validators.Length(min=1, max=255)])
 
 
 @app.route('/student_course_registration', methods=['GET', 'POST'])

@@ -8,7 +8,7 @@ from dao import dao
 
 app = Flask(__name__)
 # init MySQL
-mysql = dao.loadConfig(app)
+mysql = dao.connect_db(app)
 
 
 # Config MySQL
@@ -41,7 +41,7 @@ def login():
         password_candidate = request.form['password']
 
         # Get user by username
-        response,data = dao.execute("SELECT * FROM users WHERE username = %s", [username],'one')
+        response, data = dao.execute("SELECT * FROM users WHERE username = %s", [username],'one')
 
         if response > 0:
             # Get stored hash
@@ -174,8 +174,8 @@ def update_grades(course_registration_id):
                 gpa = 0.0
 
 
-        # Execute
-        response, data = dao.execute("UPDATE course_registration SET course_gpa=%s, exam_1=%s, exam_2=%s, final=%s WHERE id=%s",
+        # Execute Commit
+        dao.execute("UPDATE course_registration SET course_gpa=%s, exam_1=%s, exam_2=%s, final=%s WHERE id=%s",
                     (gpa, exam_1, exam_2, final, course_registration_id),'commit')
 
         flash('Grades Updated', 'success')
@@ -199,29 +199,25 @@ def admin_logged_in(f):
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 @admin_logged_in
 def admin_dashboard():
-    # Create cursor
-    cur = mysql.connection.cursor()
 
     # Get students
-    cur.execute("SELECT * FROM users WHERE role_id = 3")
-    students = cur.fetchall()
+    response, students = dao.execute("SELECT * FROM users WHERE role_id = 3",None, 'all')
+
     # Get teachers
-    cur.execute("SELECT * FROM users WHERE role_id = 2")
-    teachers = cur.fetchall()
+    response, teachers = dao.execute("SELECT * FROM users WHERE role_id = 2",None, 'all')
+
     # Get admins
-    cur.execute("SELECT * FROM users WHERE role_id = 1")
-    admins = cur.fetchall()
+    response, admins = dao.execute("SELECT * FROM users WHERE role_id = 1",None, 'all')
+
     # Get course catalog
-    cur.execute("SELECT * FROM course_details")
-    course_details = cur.fetchall()
+    response, course_details = dao.execute("SELECT * FROM course_details",None, 'all')
+
     # Get available courses
-    cur.execute("SELECT c.id, c.semester_name, cd.course_name, u.first_name, u.last_name " +
-                "FROM courses c " +
-                "INNER JOIN course_details cd on c.course_details_id = cd.id " +
-                "INNER JOIN users u on c.teacher_id = u.id")
-    courses = cur.fetchall()
-    # Close connection
-    cur.close()
+    response, courses = dao.execute("SELECT c.id, c.semester_name, cd.course_name, u.first_name, u.last_name "
+                                    "FROM courses c "
+                                    "INNER JOIN course_details cd on c.course_details_id = cd.id "
+                                    "INNER JOIN users u on c.teacher_id = u.id",None, 'all')
+
     return render_template('admin_dashboard.html', students=students, teachers=teachers, admins=admins,
                            course_details=course_details, courses=courses)
 
@@ -261,18 +257,9 @@ def user_registration():
         role = form.role.data
         password = sha256_crypt.encrypt(str('admin'))
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Execute
-        cur.execute("INSERT INTO users(first_name, last_name, email, username, password, role_id) VALUES(%s, %s, %s, %s, %s, %s);",
-                    (first_name, last_name, email, username, password, role))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        dao.execute("INSERT INTO users(first_name, last_name, email, username, password, role_id) VALUES(%s, %s, %s, %s, %s, %s);",
+                    (first_name, last_name, email, username, password, role),'commit')
 
         flash('User registered!', 'success')
 
@@ -285,18 +272,14 @@ def user_registration():
 @app.route('/edit_user/<string:user_id>', methods=['GET', 'POST'])
 @admin_logged_in
 def edit_user(user_id):
-    # Create cursor
-    cur = mysql.connection.cursor()
 
-    # Get article by id
-    result = cur.execute("SELECT * FROM users WHERE id = %s", [user_id])
-    user = cur.fetchone()
-    cur.close()
+    # Get user by id
+    response, user = dao.execute("SELECT * FROM users WHERE id = %s", [user_id],'one')
 
     # Get form
     form = UserRegisterForm(request.form)
 
-    # populate article form fields
+    # populate user form fields
     form.first_name.data = user['first_name']
     form.last_name.data = user['last_name']
     form.email.data = user['email']
@@ -311,18 +294,9 @@ def edit_user(user_id):
         username = request.form['username']
         role = request.form['role']
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Execute
-        cur.execute("UPDATE users SET first_name=%s, last_name=%s, email=%s, username=%s, role_id=%s WHERE id=%s",
-                    (first_name, last_name, email, username, role, user_id))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        dao.execute("UPDATE users SET first_name=%s, last_name=%s, email=%s, username=%s, role_id=%s WHERE id=%s",
+                    (first_name, last_name, email, username, role, user_id), 'commit')
 
         flash('User Updated', 'success')
 
@@ -334,12 +308,8 @@ def edit_user(user_id):
 @app.route('/delete_user/<string:user_id>', methods=['POST'])
 @admin_logged_in
 def delete_user(user_id):
-    cur = mysql.connection.cursor()
 
-    cur.execute("DELETE FROM users WHERE id = %s", [user_id])
-
-    mysql.connection.commit()
-    cur.close()
+    dao.execute("DELETE FROM users WHERE id = %s", [user_id], 'commit')
 
     flash('User Deleted', 'success')
     return redirect(url_for('admin_dashboard'))
@@ -359,18 +329,9 @@ def create_course():
         course_name = form.course_name.data
         course_description = form.course_description.data
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Execute
-        cur.execute("INSERT INTO course_details(course_name, course_description) VALUES(%s, %s);",
-                    (course_name, course_description))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        dao.execute("INSERT INTO course_details(course_name, course_description) VALUES(%s, %s);",
+                    (course_name, course_description), 'commit')
 
         flash('Course created!', 'success')
 
@@ -382,13 +343,9 @@ def create_course():
 @app.route('/edit_course/<string:course_id>', methods=['GET', 'POST'])
 @admin_logged_in
 def edit_course(course_id):
-    # Create cursor
-    cur = mysql.connection.cursor()
 
-    # Get article by id
-    result = cur.execute("SELECT * FROM course_details WHERE id = %s", [course_id])
-    course = cur.fetchone()
-    cur.close()
+    # Get course by id
+    response, course = dao.execute("SELECT * FROM course_details WHERE id = %s", [course_id],'one')
 
     form = CourseCreationForm(request.form)
     form.course_name.data = course['course_name']
@@ -398,18 +355,10 @@ def edit_course(course_id):
         course_name = request.form['course_name']
         course_description = request.form['course_description']
 
-        # Create cursor
-        cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("UPDATE course_details SET course_name=%s, course_description=%s WHERE id=%s;",
-                    (course_name, course_description,course_id))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        dao.execute("UPDATE course_details SET course_name=%s, course_description=%s WHERE id=%s;",
+                    (course_name, course_description,course_id), 'commit')
 
         flash('Course updated!', 'success')
 
@@ -421,12 +370,8 @@ def edit_course(course_id):
 @app.route('/delete_course/<string:course_id>', methods=['POST'])
 @admin_logged_in
 def delete_course(course_id):
-    cur = mysql.connection.cursor()
 
-    cur.execute("DELETE FROM course_details WHERE id = %s", [course_id])
-
-    mysql.connection.commit()
-    cur.close()
+    dao.execute("DELETE FROM course_details WHERE id = %s", [course_id], 'commit')
 
     flash('Course Deleted', 'success')
     return redirect(url_for('admin_dashboard'))
@@ -448,18 +393,9 @@ def course_registration():
         teacher_id = form.teacher_id.data
         semester_name = form.semester_name.data
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # Execute
-        cur.execute("INSERT INTO courses(course_details_id, teacher_id, semester_name) VALUES(%s, %s, %s);",
-                    (course_details_id, teacher_id, semester_name))
-
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        cur.close()
+        dao.execute("INSERT INTO courses(course_details_id, teacher_id, semester_name) VALUES(%s, %s, %s);",
+                    (course_details_id, teacher_id, semester_name), 'commit')
 
         flash('Course registered!', 'success')
 
@@ -482,26 +418,14 @@ def student_course_registration():
         student_id = form.student_id.data
         course_id = form.course_id.data
 
-        # Create cursor
-        cur = mysql.connection.cursor()
-
         # validate student_id is a student and course_id is a course
-        cur.execute("SELECT * FROM users WHERE id = %s AND role_id = 3", [student_id])
-        student = cur.fetchall()
-
-        cur.execute("SELECT * FROM courses WHERE id = %s", [course_id])
-        course = cur.fetchall()
+        response, student = dao.execute("SELECT * FROM users WHERE id = %s AND role_id = 3", [student_id], 'all')
+        response, course = dao.execute("SELECT * FROM courses WHERE id = %s", [course_id], 'all')
 
         if len(student) > 0 and len(course) > 0:
             # Execute
-            cur.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
-                        (int(student_id), int(course_id)))
-
-            # Commit to DB
-            mysql.connection.commit()
-
-            # Close connection
-            cur.close()
+            dao.execute("INSERT INTO course_registration(student_id, course_id) VALUES(%s, %s);",
+                        (int(student_id), int(course_id)), 'commit')
 
             flash('Student registered in the course!', 'success')
 

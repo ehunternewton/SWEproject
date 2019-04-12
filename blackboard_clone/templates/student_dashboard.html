@@ -31,5 +31,9 @@
                 <td>{{ course.course_gpa }}</td>
             </tr>
         {% endfor %}
+        <tr>
+            <td>Cumulative GPA: </td>
+            <td>{{ courses['avg_gpa'] }}</td>
+        </tr>
     </table>
 {% endblock %}

@@ -1,4 +1,15 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark">
+ <style type="text/css">
+        .bg-darkt{
+                background-color: rgba(0, 0, 25, .75);
+        }
+    .navbar-dark .navbar-nav .nav-link  {
+            color: #fff;
+            opacity: .90;
+        }
+    </style>
+
+
+<nav class="navbar navbar-expand navbar-dark bg-darkt">
           <a class="navbar-brand" href="/">xMenAcademy</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -27,7 +38,7 @@
                     </li>
                 {% elif session.teacher_logged_in %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/teacher_dashboard">Dashboard</a>
+                        <a class="nav-link " href="/teacher_dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>

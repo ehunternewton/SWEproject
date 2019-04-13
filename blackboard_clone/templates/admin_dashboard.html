@@ -12,11 +12,26 @@
             font-size: 115%;
         }
 
-        .centeredtext {
-            text-align: center;
-            align-content: center;
-            align-items: center;
 
+
+
+
+        .glow {
+            font-size: 28px;
+            color: #fff;
+            text-align: left;
+            -webkit-animation: glow 1s ease-in-out infinite alternate;
+            -moz-animation: glow 1s ease-in-out infinite alternate;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @-webkit-keyframes glow {
+            from {
+                text-shadow: 0 0 4px #4b23ff, 0 0 8px #7931ff, 0 0 8px #c733e6, 0 0 8px #df50e6, 0 0 8px #e60073, 0 0 8px #e60073, 0 0 4px #e60073;
+            }
+            to {
+                text-shadow: 0 0 4px rgba(0, 0, 0, 0.98), 0 0 8px #ff4da6, 0 0 8px #ff4da6, 0 0 8px #a9326e, 0 0 8px #ff4da6, 0 0 8px #ff4da6, 0 0 4px #ff4da6;
+            }
         }
     </style>
 
@@ -26,19 +41,19 @@
 
     <hr>
     <div class="row" style="border:1px solid rgba(255, 255, 255, .05);background: rgba(255, 255, 255, .10);">
-        <div class="col-6 animated fadeInLeft">
+        <div class="col-6 animated fadeInLeft glow">
             <a class="btn btn-xl btn-block btn-sf" href="/user_registration"><i
                     class="fas fa-user-plus  float-right"></i>User Registration</a>
         </div>
-        <div class="col-6 animated fadeInRight">
+        <div class="col-6 animated fadeInRight glow">
             <a class="btn btn-xl btn-block btn-sf" href="/create_course"><i class="fas fa-chalkboard float-right"></i>Create
                 Course</a>
         </div>
-        <div class="col-6 animated fadeInLeft">
+        <div class="col-6 animated fadeInLeft glow">
             <a class="btn btn-xl btn-block btn-sf" href="/course_registration"><i
                     class="fas fa-chalkboard-teacher float-right"></i>Teacher Course Registration</a>
         </div>
-        <div class="col-6 animated fadeInRight">
+        <div class="col-6 animated fadeInRight glow">
             <a class="btn btn-xl btn-block btn-sf" href="/student_course_registration"><i
                     class="fas fa-chalkboard-teacher float-right"></i>Student Course Registration</a>
         </div>
@@ -53,7 +68,7 @@
 
     <hr>
     <div>
-        <h2 style="background: rgba(0,0,0,.45);margin-bottom: 0">Students</h2>
+        <h2 class="glow" style="background: rgba(0,0,0,.45);margin-bottom: 0">Students</h2>
         <table class="table table-striped table-sm animated pulse faster">
             <tr style="background: rgba(0,0,0,.45)">
                 <th style="width:  5%">ID</th>
@@ -82,7 +97,7 @@
             {% endfor %}
         </table>
     </div>
-    <h2 style="background: rgba(0,0,0,.45);margin-bottom: 0">Teachers</h2>
+    <h2 class="glow"  style="background: rgba(0,0,0,.45);margin-bottom: 0">Teachers</h2>
     <table class="table table-striped table-sm animated pulse faster">
         <tr style="background: rgba(0,0,0,.45)">
             <th style="width:  5%">ID</th>
@@ -111,7 +126,7 @@
         {% endfor %}
     </table>
 
-    <h2 style="background: rgba(0,0,0,.45);margin-bottom: 0">Administrators</h2>
+    <h2 class="glow"  style="background: rgba(0,0,0,.45);margin-bottom: 0">Administrators</h2>
     <table class="table table-striped table-sm animated pulse faster">
         <tr style="background: rgba(0,0,0,.45)">
             <th style="width:  5%">ID</th>
@@ -140,7 +155,7 @@
         {% endfor %}
     </table>
 
-    <h2 style="background: rgba(0,0,0,.45);margin-bottom: 0">Course Catalog</h2>
+    <h2 class="glow"  style="background: rgba(0,0,0,.45);margin-bottom: 0">Course Catalog</h2>
     <table class="table table-striped table-sm animated pulse faster">
         <tr style="background: rgba(0,0,0,.45)">
             <th style="width:  5%">ID</th>
@@ -165,7 +180,7 @@
         {% endfor %}
     </table>
     <hr>
-    <h2 style="background: rgba(0,0,0,.45);margin-bottom: 0">Available Courses</h2>
+    <h2 class="glow"  style="background: rgba(0,0,0,.45);margin-bottom: 0">Available Courses</h2>
     <table class="table table-striped table-sm animated pulse faster">
         <tr style="background: rgba(0,0,0,.45)">
             <th style="width:  5%">ID</th>

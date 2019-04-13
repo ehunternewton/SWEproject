@@ -1,31 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block prebody %}
-    <div class="row"
-         style="display:block;border:1px solid rgba(255, 255, 255, .02);background: rgba(255, 255, 255, .02);">
-        <div class="col-4">
-            <div class="col-6 animated fadeInLeft glow">
-                <a class="btn btn-xl btn-block btn-sf" href="/user_registration"><i
-                        class="fas fa-user-plus  float-right"></i>User Registration</a>
-            </div>
-            <div class="col-6 animated fadeInRight glow">
-                <a class="btn btn-xl btn-block btn-sf" href="/create_course"><i
-                        class="fas fa-chalkboard float-right"></i>Create
-                    Course</a>
-            </div>
-            <div class="col-6 animated fadeInLeft glow">
-                <a class="btn btn-xl btn-block btn-sf" href="/course_registration"><i
-                        class="fas fa-chalkboard-teacher float-right"></i>Teacher Course Registration</a>
-            </div>
-            <div class="col-6 animated fadeInRight glow">
-                <a class="btn btn-xl btn-block btn-sf" href="/student_course_registration"><i
-                        class="fas fa-chalkboard-teacher float-right"></i>Student Course Registration</a>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block body %}
     <style type="text/css">
         .table {
             color: #e8f4ff;
@@ -56,150 +31,182 @@
         }
     </style>
 
-    <h1 style="margin-top: -268px" class="animated flipInX slow">
-        <small>Welcome <span class="user_highlight">{{ session.username }}
+    <div class="row">
+        <div class="col-2">
+            <div class="col-12 animated fadeInLeft glow">
+                <a class="btn btn-xl btn-block btn-sf" href="/user_registration"><i
+                        class="fas fa-user-plus  float-right"></i>User Registration</a>
+            </div>
+            <div class="col-12 animated fadeInRight glow">
+                <a class="btn btn-xl btn-block btn-sf" href="/create_course"><i
+                        class="fas fa-chalkboard float-right"></i>Create
+                    Course</a>
+            </div>
+            <div class="col-12 animated fadeInLeft glow">
+                <a class="btn btn-xl btn-block btn-sf" href="/course_registration"><i
+                        class="fas fa-chalkboard-teacher float-right"></i>Teacher Course Registration</a>
+            </div>
+            <div class="col-12  animated fadeInRight glow">
+                <a class="btn btn-xl btn-block btn-sf" href="/student_course_registration"><i
+                        class="fas fa-chalkboard-teacher float-right"></i>Student Course Registration</a>
+            </div>
+        </div>
+
+
+        <div class="col-8" style="border:1px solid rgba(0, 0, 0, .35);background: rgba(0, 0, 0, .35);">
+            <h1 class="animated flipInX slow">
+                <small>Welcome <span class="user_highlight">{{ session.username }}
         </span></small>
-    </h1>
+            </h1>
 
-    <div>
-        <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Students</h2>
-        <table class="table table-striped table-sm animated pulse faster">
-            <tr style="background: rgba(0,0,0,.45)">
-                <th style="width:  5%">ID</th>
-                <th style="width: 20%">First Name</th>
-                <th style="width: 20%">Last Name</th>
-                <th style="width: 15%">Username</th>
-                <th style="width: 20%">Email</th>
-                <th style="width: 10%"></th>
-                <th style="width: 10%"></th>
-            </tr>
-            {% for student in students %}
-                <tr>
-                    <td>{{ student.id }}</td>
-                    <td>{{ student.first_name }}</td>
-                    <td>{{ student.last_name }}</td>
-                    <td class="user_highlight">{{ student.username }}</td>
-                    <td>{{ student.email }}</td>
-                    <td><a href="edit_user/{{ student.id }}" class="btn btn-block btn-sf">Edit</a></td>
-                    <td>
-                        <form action="{{ url_for('delete_user', user_id=student.id) }}" method="post">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                        </form>
-                    </td>
+            <div>
+                <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Students</h2>
+                <table class="table table-striped table-sm animated pulse faster">
+                    <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
+                        <th style="width:  5%">ID</th>
+                        <th style="width: 20%">First Name</th>
+                        <th style="width: 20%">Last Name</th>
+                        <th style="width: 15%">Username</th>
+                        <th style="width: 20%">Email</th>
+                        <th style="width: 10%"></th>
+                        <th style="width: 10%"></th>
+                    </tr>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.id }}</td>
+                            <td>{{ student.first_name }}</td>
+                            <td>{{ student.last_name }}</td>
+                            <td class="user_highlight">{{ student.username }}</td>
+                            <td>{{ student.email }}</td>
+                            <td><a href="edit_user/{{ student.id }}" class="btn btn-block btn-sf">Edit</a></td>
+                            <td>
+                                <form action="{{ url_for('delete_user', user_id=student.id) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Teachers</h2>
+            <table class="table table-striped table-sm animated pulse faster">
+                <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
+                    <th style="width:  5%">ID</th>
+                    <th style="width: 20%">First Name</th>
+                    <th style="width: 20%">Last Name</th>
+                    <th style="width: 15%">Username</th>
+                    <th style="width: 20%">Email</th>
+                    <th style="width: 10%"></th>
+                    <th style="width: 10%"></th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for teacher in teachers %}
+                    <tr>
+                        <td>{{ teacher.id }}</td>
+                        <td>{{ teacher.first_name }}</td>
+                        <td>{{ teacher.last_name }}</td>
+                        <td class="user_highlight">{{ teacher.username }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td><a href="edit_user/{{ teacher.id }}" class="btn btn-block btn-sf">Edit</a></td>
+                        <td>
+                            <form action="{{ url_for('delete_user', user_id=teacher.id) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Administrators</h2>
+            <table class="table table-striped table-sm animated pulse faster">
+                <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
+                    <th style="width:  5%">ID</th>
+                    <th style="width: 20%">First Name</th>
+                    <th style="width: 20%">Last Name</th>
+                    <th style="width: 15%">Username</th>
+                    <th style="width: 20%">Email</th>
+                    <th style="width: 10%"></th>
+                    <th style="width: 10%"></th>
+                </tr>
+                {% for admin in admins %}
+                    <tr>
+                        <td>{{ admin.id }}</td>
+                        <td>{{ admin.first_name }}</td>
+                        <td>{{ admin.last_name }}</td>
+                        <td class="user_highlight">{{ admin.username }}</td>
+                        <td>{{ admin.email }}</td>
+                        <td><a href="edit_user/{{ admin.id }}" class="btn btn-block btn-sf">Edit</a></td>
+                        <td>
+                            <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Course Catalog</h2>
+            <table class="table table-striped table-sm animated pulse faster">
+                <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
+                    <th style="width:  5%">ID</th>
+                    <th style="width:  15%">Course Name</th>
+                    <th style="width:  60%">Course Description</th>
+                    <th style="width:  10%"></th>
+                    <th style="width:  10%"></th>
+                </tr>
+                {% for course in course_details %}
+                    <tr>
+                        <td>{{ course.id }}</td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.course_description }}</td>
+                        <td><a href="edit_course/{{ course.id }}" class="btn btn-block btn-sf">Edit</a></td>
+                        <td>
+                            <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <hr>
+            <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Available Courses</h2>
+            <table class="table table-striped table-sm animated pulse faster">
+                <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
+                    <th style="width:  5%">ID</th>
+                    <th style="width:  15%">Course Catalog Name</th>
+                    <th style="width:  20%">Teacher</th>
+                    <th style="width:  25%">Semester</th>
+                    <th style="width:  10%"></th>
+                    <th style="width:  10%"></th>
+                </tr>
+                {% for course in courses %}
+                    <tr>
+                        <td>{{ course.id }}</td>
+                        <td>{{ course.course_name }}</td>
+                        <td>{{ course.first_name }} {{ course.last_name }}</td>
+                        <td>{{ course.semester_name }}</td>
+                        {#                <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>#}
+                        {#                <td>#}
+                        {#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
+                        {#                        <input type="hidden" name="_method" value="DELETE">#}
+                        {#                        <input type="submit" value="Delete" class="btn btn-danger">#}
+                        {#                    </form>#}
+                        {#                </td>#}
+                    </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+
     </div>
-    <h2 class="glow"  style="background: rgba(0,0,0,.15);margin-bottom: 0">Teachers</h2>
-    <table class="table table-striped table-sm animated pulse faster">
-        <tr style="background: rgba(0,0,0,.45)">
-            <th style="width:  5%">ID</th>
-            <th style="width: 20%">First Name</th>
-            <th style="width: 20%">Last Name</th>
-            <th style="width: 15%">Username</th>
-            <th style="width: 20%">Email</th>
-            <th style="width: 10%"></th>
-            <th style="width: 10%"></th>
-        </tr>
-        {% for teacher in teachers %}
-            <tr>
-                <td>{{ teacher.id }}</td>
-                <td>{{ teacher.first_name }}</td>
-                <td>{{ teacher.last_name }}</td>
-                <td class="user_highlight">{{ teacher.username }}</td>
-                <td>{{ teacher.email }}</td>
-                <td><a href="edit_user/{{ teacher.id }}" class="btn btn-block btn-sf">Edit</a></td>
-                <td>
-                    <form action="{{ url_for('delete_user', user_id=teacher.id) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
 
-    <h2 class="glow"  style="background: rgba(0,0,0,.15);margin-bottom: 0">Administrators</h2>
-    <table class="table table-striped table-sm animated pulse faster">
-        <tr style="background: rgba(0,0,0,.45)">
-            <th style="width:  5%">ID</th>
-            <th style="width: 20%">First Name</th>
-            <th style="width: 20%">Last Name</th>
-            <th style="width: 15%">Username</th>
-            <th style="width: 20%">Email</th>
-            <th style="width: 10%"></th>
-            <th style="width: 10%"></th>
-        </tr>
-        {% for admin in admins %}
-            <tr>
-                <td>{{ admin.id }}</td>
-                <td>{{ admin.first_name }}</td>
-                <td>{{ admin.last_name }}</td>
-                <td class="user_highlight">{{ admin.username }}</td>
-                <td>{{ admin.email }}</td>
-                <td><a href="edit_user/{{ admin.id }}" class="btn btn-block btn-sf">Edit</a></td>
-                <td>
-                    <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
 
-    <h2 class="glow"  style="background: rgba(0,0,0,.15);margin-bottom: 0">Course Catalog</h2>
-    <table class="table table-striped table-sm animated pulse faster">
-        <tr style="background: rgba(0,0,0,.45)">
-            <th style="width:  5%">ID</th>
-            <th style="width:  15%">Course Name</th>
-            <th style="width:  60%">Course Description</th>
-            <th style="width:  10%"></th>
-            <th style="width:  10%"></th>
-        </tr>
-        {% for course in course_details %}
-            <tr>
-                <td>{{ course.id }}</td>
-                <td>{{ course.course_name }}</td>
-                <td>{{ course.course_description }}</td>
-                <td><a href="edit_course/{{ course.id }}" class="btn btn-block btn-sf">Edit</a></td>
-                <td>
-                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <hr>
-    <h2 class="glow"  style="background: rgba(0,0,0,.15);margin-bottom: 0">Available Courses</h2>
-    <table class="table table-striped table-sm animated pulse faster">
-        <tr style="background: rgba(0,0,0,.45)">
-            <th style="width:  5%">ID</th>
-            <th style="width:  15%">Course Catalog Name</th>
-            <th style="width:  20%">Teacher</th>
-            <th style="width:  25%">Semester</th>
-            <th style="width:  10%"></th>
-            <th style="width:  10%"></th>
-        </tr>
-        {% for course in courses %}
-            <tr>
-                <td>{{ course.id }}</td>
-                <td>{{ course.course_name }}</td>
-                <td>{{ course.first_name }} {{ course.last_name }}</td>
-                <td>{{ course.semester_name }}</td>
-                {#                <td ><a href="edit_course/{{ course.id }}" class="btn btn-light float-right">Edit</a></td>#}
-                {#                <td>#}
-                {#                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">#}
-                {#                        <input type="hidden" name="_method" value="DELETE">#}
-                {#                        <input type="submit" value="Delete" class="btn btn-danger">#}
-                {#                    </form>#}
-                {#                </td>#}
-            </tr>
-        {% endfor %}
-    </table>
+{% endblock %}
 
+{% block body %}
 
 {% endblock %}

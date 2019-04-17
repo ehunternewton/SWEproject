@@ -121,7 +121,7 @@ class admin:
 
                 flash('Course created!', 'success')
 
-                redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin_dashboard'))
 
             return render_template('create_course.html', form=form)
 
@@ -154,6 +154,11 @@ class admin:
         @admin_logged_in
         def delete_course(course_id):
 
+            response, registrations = dao.execute("SELECT * FROM courses WHERE course_details_id = %s", [course_id], 'one')
+            course_to_delete = registrations['id']
+            # records are explicitly deleted
+            dao.execute("DELETE FROM course_registration WHERE course_id = %s", [course_to_delete], 'commit')
+            dao.execute("DELETE FROM courses WHERE course_details_id = %s", [course_id], 'commit')
             dao.execute("DELETE FROM course_details WHERE id = %s", [course_id], 'commit')
 
             flash('Course Deleted', 'success')

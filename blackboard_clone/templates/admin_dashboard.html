@@ -318,13 +318,14 @@
 
                                 </div>
                                 <div class="modal-body">
-                                    <p>Are you sure you want to delete {{ course.course_name }}???</p>
+                                    <p>Are you sure you want to delete course named: {{ course.course_name }}???</p>
+                                    <p class="alert alert-danger">Delete action will also remove any students and teachers associated with this course</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
                                         Cancel Delete
                                     </button>
-                                    <form action="{{ url_for('delete_course', user_id=course.id) }}" method="post">
+                                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
                                     </form>

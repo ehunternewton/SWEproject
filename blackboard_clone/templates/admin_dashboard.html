@@ -295,12 +295,45 @@
                         <td>{{ course.course_description }}</td>
                         <td><a href="edit_course/{{ course.id }}" class="btn btn-block btn-sf">Edit</a></td>
                         <td>
-                            <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                            </form>
+                            <button type="button" class="btn btn-block btn-sf-red" data-toggle="modal"
+                                        data-target="#myOutput{{ course.id }}">Delete
+                                </button>
                         </td>
                     </tr>
+                {% endfor %}
+
+             </table>
+                {% for course in course_details %}
+
+                    <div class="modal fade" id="myOutput{{ course.id }}" role="dialog">
+                        <div class="modal-dialog modal-xl">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">DELETE COURSE</h4>
+                                    <button style="color: #fff" type="button" class="close" data-dismiss="modal">
+                                        &times;
+                                    </button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete {{ course.course_name }}???</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
+                                        Cancel Delete
+                                    </button>
+                                    <form action="{{ url_for('delete_user', user_id=course.id) }}" method="post">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                 {% endfor %}
             </table>
             <hr>

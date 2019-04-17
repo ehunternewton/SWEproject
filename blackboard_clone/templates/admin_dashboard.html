@@ -9,7 +9,7 @@
 
         .user_highlight {
             color: #ece90e;
-            font-size: 115%;
+            font-size: 135%;
         }
 
         .glow {
@@ -20,6 +20,17 @@
             -moz-animation: glow 1s ease-in-out infinite alternate;
             animation: glow 1s ease-in-out infinite alternate;
         }
+
+.nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+
+}
+
+.nav-tabs .nav-link.active {
+    color: rgba(255, 37, 7, .85);
+    background-color: rgba(255, 37, 7, .15);
+    border-color: #dee2e6 #dee2e6 #fff;
+}
 
         .modal-content {
             background-color: rgba(0, 0, 0, .9);
@@ -60,34 +71,61 @@
     </style>
 
     <div class="row">
-        <div class="col-2">
-            <div class="col-12 animated fadeInLeft glow">
+        <div class="col-2 glow" style="margin-top: 180px; font-size: 120%">
+            <div class="col-12 animated fadeInLeft">
                 <a class="btn btn-xl btn-block btn-sf" href="/user_registration"><i
                         class="fas fa-user-plus  float-right"></i>User Registration</a>
             </div>
-            <div class="col-12 animated fadeInRight glow">
+            <div class="col-12 animated fadeInRight">
                 <a class="btn btn-xl btn-block btn-sf" href="/create_course"><i
                         class="fas fa-chalkboard float-right"></i>Create
                     Course</a>
             </div>
-            <div class="col-12 animated fadeInLeft glow">
+            <div class="col-12 animated fadeInLeft">
                 <a class="btn btn-xl btn-block btn-sf" href="/course_registration"><i
                         class="fas fa-chalkboard-teacher float-right"></i>Teacher Course Registration</a>
             </div>
-            <div class="col-12  animated fadeInRight glow">
+            <div class="col-12  animated fadeInRight">
                 <a class="btn btn-xl btn-block btn-sf" href="/student_course_registration"><i
                         class="fas fa-chalkboard-teacher float-right"></i>Student Course Registration</a>
             </div>
         </div>
 
 
-        <div class="col-8" style="border:1px solid rgba(0, 0, 0, .35);background: rgba(0, 0, 0, .35);">
+        <div class="col-8" style="text-align:right;border:1px solid rgba(0, 0, 0, .35);background: rgba(0, 0, 0, .35);">
             <h1 class="animated flipInX slow">
                 <small>Welcome <span class="user_highlight">{{ session.username }}
         </span></small>
             </h1>
 
-            <div>
+
+            <ul class="nav nav-tabs float-right" style="margin-top: 16px" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <h5 class="nav-link active " style="margin-bottom: 0"  id="students-tab" data-toggle="tab" href="#student" role="tab"
+                       aria-controls="student" aria-selected="true">Students</h5>
+                </li>
+                <li class="nav-item">
+                   <h5 class="nav-link " style="margin-bottom: 0"  id="teachers-tab" data-toggle="tab" href="#teacher" role="tab"
+                       aria-controls="teacher" aria-selected="true">Teachers</h5>
+                </li>
+                <li class="nav-item">
+                   <h5 class="nav-link " style="margin-bottom: 0"  id="administrator-tab" data-toggle="tab" href="#administrator" role="tab"
+                       aria-controls="administrator" aria-selected="true">Administrators</h5>
+                </li>
+                <li class="nav-item">
+                    <h5 class="nav-link " style="margin-bottom: 0"  id="registration-tab" data-toggle="tab" href="#registration" role="tab"
+                       aria-controls="registration" aria-selected="true">Course Catalog</h5>
+                </li>
+                <li class="nav-item">
+                    <h5 class="nav-link " style="margin-bottom: 0"  id="course-tab" data-toggle="tab" href="#course" role="tab"
+                       aria-controls="course" aria-selected="true">Available Courses</h5>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent" style="margin-top: 100px">
+                <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+
+                                <div>
                 <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Students</h2>
                 <table class="table table-striped table-sm animated pulse faster">
                     <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
@@ -152,6 +190,13 @@
                 {% endfor %}
 
             </div>
+
+
+                </div>
+                <div class="tab-pane fade" id="teacher" role="tabpanel" aria-labelledby="teacher-tab">
+
+                    <div>
+
             <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Teachers</h2>
             <table class="table table-striped table-sm animated pulse faster">
                 <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
@@ -173,48 +218,51 @@
                         <td><a href="edit_user/{{ teacher.id }}" class="btn btn-block btn-sf">Edit</a></td>
                         <td>
                             <button type="button" class="btn btn-block btn-sf-red" data-toggle="modal"
-                                        data-target="#myOutput{{ teacher.id }}">Delete
-                                </button>
+                                    data-target="#myOutput{{ teacher.id }}">Delete
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
 
             </table>
-                {% for teacher in teachers %}
+            {% for teacher in teachers %}
 
-                    <div class="modal fade" id="myOutput{{ teacher.id }}" role="dialog">
-                        <div class="modal-dialog modal-xl">
+                <div class="modal fade" id="myOutput{{ teacher.id }}" role="dialog">
+                    <div class="modal-dialog modal-xl">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">DELETE TEACHER</h4>
-                                    <button style="color: #fff" type="button" class="close" data-dismiss="modal">
-                                        &times;
-                                    </button>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">DELETE TEACHER</h4>
+                                <button style="color: #fff" type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
 
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete {{ teacher.username }}???</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
-                                        Cancel Delete
-                                    </button>
-                                    <form action="{{ url_for('delete_user', user_id=teacher.id) }}" method="post">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                                    </form>
-                                </div>
                             </div>
-
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete {{ teacher.username }}???</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
+                                    Cancel Delete
+                                </button>
+                                <form action="{{ url_for('delete_user', user_id=teacher.id) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                                </form>
+                            </div>
                         </div>
+
                     </div>
+                </div>
 
-                {% endfor %}
+            {% endfor %}
+</div>
 
+                </div>
+                <div class="tab-pane fade" id="administrator" role="tabpanel" aria-labelledby="administrator-tab">
 
-            </table>
+                    <div>
 
             <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Administrators</h2>
             <table class="table table-striped table-sm animated pulse faster">
@@ -236,50 +284,54 @@
                         <td>{{ admin.email }}</td>
                         <td><a href="edit_user/{{ admin.id }}" class="btn btn-block btn-sf">Edit</a></td>
                         <td>
-                             <button type="button" class="btn btn-block btn-sf-red" data-toggle="modal"
-                                        data-target="#myOutput{{ admin.id }}">Delete
-                                </button>
+                            <button type="button" class="btn btn-block btn-sf-red" data-toggle="modal"
+                                    data-target="#myOutput{{ admin.id }}">Delete
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
 
             </table>
-                {% for admin in admins %}
+            {% for admin in admins %}
 
-                    <div class="modal fade" id="myOutput{{ admin.id }}" role="dialog">
-                        <div class="modal-dialog modal-xl">
+                <div class="modal fade" id="myOutput{{ admin.id }}" role="dialog">
+                    <div class="modal-dialog modal-xl">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">DELETE ADMINISTRATOR</h4>
-                                    <button style="color: #fff" type="button" class="close" data-dismiss="modal">
-                                        &times;
-                                    </button>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">DELETE ADMINISTRATOR</h4>
+                                <button style="color: #fff" type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
 
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete {{ admin.username }}???</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
-                                        Cancel Delete
-                                    </button>
-                                    <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                                    </form>
-                                </div>
                             </div>
-
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete {{ admin.username }}???</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
+                                    Cancel Delete
+                                </button>
+                                <form action="{{ url_for('delete_user', user_id=admin.id) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                                </form>
+                            </div>
                         </div>
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
                     </div>
 
-                {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
 
-            </table>
-
-            <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Course Catalog</h2>
+                    <div>
+                                    <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Course Catalog</h2>
             <table class="table table-striped table-sm animated pulse faster">
                 <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
                     <th style="width:  5%">ID</th>
@@ -296,48 +348,54 @@
                         <td><a href="edit_course/{{ course.id }}" class="btn btn-block btn-sf">Edit</a></td>
                         <td>
                             <button type="button" class="btn btn-block btn-sf-red" data-toggle="modal"
-                                        data-target="#myOutput{{ course.id }}">Delete
-                                </button>
+                                    data-target="#myOutput{{ course.id }}">Delete
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}
 
-             </table>
-                {% for course in course_details %}
+            </table>
+            {% for course in course_details %}
 
-                    <div class="modal fade" id="myOutput{{ course.id }}" role="dialog">
-                        <div class="modal-dialog modal-xl">
+                <div class="modal fade" id="myOutput{{ course.id }}" role="dialog">
+                    <div class="modal-dialog modal-xl">
 
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">DELETE COURSE</h4>
-                                    <button style="color: #fff" type="button" class="close" data-dismiss="modal">
-                                        &times;
-                                    </button>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">DELETE COURSE</h4>
+                                <button style="color: #fff" type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
 
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete course named: {{ course.course_name }}???</p>
-                                    <p class="alert alert-danger">Delete action will also remove any students and teachers associated with this course</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
-                                        Cancel Delete
-                                    </button>
-                                    <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
-                                    </form>
-                                </div>
                             </div>
-
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete course named: {{ course.course_name }}???</p>
+                                <p class="alert alert-danger">Delete action will also remove any students and teachers
+                                    associated with this course</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-block btn-sf float-left" data-dismiss="modal">
+                                    Cancel Delete
+                                </button>
+                                <form action="{{ url_for('delete_course', course_id=course.id) }}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="submit" value="Delete" class="btn btn-block btn-sf-red">
+                                </form>
+                            </div>
                         </div>
+
+                    </div>
+                </div>
+
+            {% endfor %}
                     </div>
 
-                {% endfor %}
-            </table>
-            <hr>
+                </div>
+                <div class="tab-pane fade" id="course" role="tabpanel" aria-labelledby="course-tab">
+
+
+
             <h2 class="glow" style="background: rgba(0,0,0,.15);margin-bottom: 0">Available Courses</h2>
             <table class="table table-striped table-sm animated pulse faster">
                 <tr style="background: rgba(0,0,0,.85);margin-bottom:0">
@@ -364,6 +422,14 @@
                     </tr>
                 {% endfor %}
             </table>
+
+                </div>
+            </div>
+
+
+
+
+
 
         </div>
 

@@ -2,7 +2,7 @@ from flask import session, render_template, redirect, url_for, flash, request
 from passlib.hash import sha256_crypt
 from wtforms import Form, validators, StringField, SelectField
 from functools import wraps
-from dao import dao
+from .dao import dao
 
 
 class admin:

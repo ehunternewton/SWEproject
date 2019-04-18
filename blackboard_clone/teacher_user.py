@@ -1,7 +1,7 @@
 from flask import session, render_template, redirect, url_for,flash,request
 from wtforms import Form, validators, DecimalField
 from functools import wraps
-from dao import dao
+from .dao import dao
 
 
 class teacher:

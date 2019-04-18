@@ -1,6 +1,6 @@
 from flask import session, render_template, redirect, url_for,flash
 from functools import wraps
-from dao import dao
+from .dao import dao
 
 
 class student:
@@ -20,7 +20,10 @@ class student:
                 "INNER JOIN users u ON c.teacher_id = u.id "
                 "WHERE student_id = %s;", [session['user_id']], 'all')
 
-            return render_template('student_dashboard.html', courses=data)
+            response, avg_gpa = dao.execute("SELECT AVG(course_gpa) AS avg_gpa FROM course_registration "
+                                            "WHERE student_id = %s;", [session['user_id']], 'all')
+
+            return render_template('student_dashboard.html', courses=data, avg_gpa=avg_gpa)
 
 
 def student_logged_in(f):

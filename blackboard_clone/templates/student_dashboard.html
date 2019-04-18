@@ -20,7 +20,7 @@
             <th>Final</th>
             <th>Course GPA</th>
         </tr>
-    {% for course in courses %}
+        {% for course in courses %}
             <tr>
                 <td>{{ course.course_name }}</td>
                 <td>{{ course.first_name }} {{ course.last_name }}</td>
@@ -33,7 +33,7 @@
         {% endfor %}
         <tr>
             <td>Cumulative GPA: </td>
-            <td>{{ courses['avg_gpa'] }}</td>
+            <td>{{ avg_gpa[0].get('avg_gpa') }}</td>
         </tr>
     </table>
 {% endblock %}

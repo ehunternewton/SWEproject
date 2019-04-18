@@ -23,7 +23,6 @@ class admin:
                 search_student = "'%%"+search_student+"%%'"
                 sql = "SELECT * FROM users WHERE role_id = 3 AND (last_name Like "+search_student+" OR first_name Like "+search_student+" OR username Like  "+search_student+" )"
                 response, students = dao.execute(sql, None, 'all')
-                flash(students,'success')
             # Get teachers
             response, teachers = dao.execute("SELECT * FROM users WHERE role_id = 2", None, 'all')
 

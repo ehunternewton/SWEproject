@@ -6,7 +6,7 @@ class dao:
 
     def connect_db(app):
         mysql = MySQL(app)
-        app.config['MYSQL_HOST'] = 'xavier.c4dthivni7sx.us-east-1.rds.amazonaws.com'
+        app.config['MYSQL_HOST'] = 'xmenbb.c4dthivni7sx.us-east-1.rds.amazonaws.com'
         app.config['MYSQL_USER'] = 'root'
         app.config['MYSQL_PASSWORD'] = '12345678'
         app.config['MYSQL_DB'] = 'myflaskapp'

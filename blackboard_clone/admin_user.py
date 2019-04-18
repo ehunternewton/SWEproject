@@ -10,12 +10,20 @@ class admin:
     @staticmethod
     def load_routes(app):
 
-        @app.route('/admin_dashboard', methods=['GET', 'POST'])
+        @app.route('/admin_dashboard/', defaults ={'search_student': ''}, methods=['GET', 'POST'])
+        @app.route('/admin_dashboard/<string:search_student>', methods=['GET', 'POST'])
         @admin_logged_in
-        def admin_dashboard():
+        def admin_dashboard(search_student):
             # Get students
-            response, students = dao.execute("SELECT * FROM users WHERE role_id = 3", None, 'all')
 
+            if search_student == '':
+                response, students = dao.execute(
+                    "SELECT * FROM users WHERE role_id = 3",None, 'all')
+            else:
+                search_student = "'%%"+search_student+"%%'"
+                sql = "SELECT * FROM users WHERE role_id = 3 AND (last_name Like "+search_student+" OR first_name Like "+search_student+" OR username Like  "+search_student+" )"
+                response, students = dao.execute(sql, None, 'all')
+                flash(students,'success')
             # Get teachers
             response, teachers = dao.execute("SELECT * FROM users WHERE role_id = 2", None, 'all')
 

@@ -1,4 +1,5 @@
 from flask_mysqldb import MySQL
+from flask import flash
 
 
 class dao:

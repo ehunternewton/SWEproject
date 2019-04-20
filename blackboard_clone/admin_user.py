@@ -1,6 +1,6 @@
 from flask import session, render_template, redirect, url_for, flash, request
 from passlib.hash import sha256_crypt
-from wtforms import Form, validators, StringField, SelectField
+from wtforms import Form, validators, StringField, SelectField, PasswordField
 from functools import wraps
 from .dao import dao
 
@@ -217,6 +217,16 @@ class admin:
 
             return render_template('student_course_registration.html', form=form)
 
+        @app.route('/change_password', methods=['GET', 'POST'])
+        def change_password():
+            form = ChangePasswordForm(request.form)
+            if request.method == 'POST' and form.validate():
+                password = sha256_crypt.encrypt(str(form.password.data))
+                dao.execute("UPDATE users SET password = %s WHERE id = %s;", (password, session['user_id']), 'commit')
+                flash('Password changed!', 'success')
+                return redirect(url_for('index'))
+            return render_template('change_password.html', form=form)
+
 
 def admin_logged_in(f):
     @wraps(f)
@@ -261,3 +271,10 @@ class CourseRegisterForm(Form):
 class StudentCourseRegisterForm(Form):
     student_id = StringField('Student ID', [validators.Length(min=1, max=100)])
     course_id = StringField('Course ID', [validators.Length(min=1, max=255)])
+
+
+# change password form
+class ChangePasswordForm(Form):
+    password = PasswordField('Password', [validators.DataRequired(),
+                                          validators.EqualTo('confirm', message='Passwords do not match')])
+    confirm = PasswordField('Confirm Password')

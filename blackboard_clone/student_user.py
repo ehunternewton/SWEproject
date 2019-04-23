@@ -1,6 +1,6 @@
 from flask import session, render_template, redirect, url_for,flash
 from functools import wraps
-from .dao import dao
+from dao import dao
 
 
 class student:

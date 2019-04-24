@@ -2,7 +2,7 @@ from flask import session, render_template, redirect, url_for, flash, request
 from passlib.hash import sha256_crypt
 from wtforms import Form, validators, StringField, SelectField, PasswordField
 from functools import wraps
-from .dao import dao
+from dao import dao
 
 
 class admin:
@@ -162,9 +162,10 @@ class admin:
         def delete_course(course_id):
 
             response, registrations = dao.execute("SELECT * FROM courses WHERE course_details_id = %s", [course_id], 'one')
-            course_to_delete = registrations['id']
-            # records are explicitly deleted
-            dao.execute("DELETE FROM course_registration WHERE course_id = %s", [course_to_delete], 'commit')
+            if registrations != None:
+                course_to_delete = registrations['id']
+                # records are explicitly deleted
+                dao.execute("DELETE FROM course_registration WHERE course_id = %s", [course_to_delete], 'commit')
             dao.execute("DELETE FROM courses WHERE course_details_id = %s", [course_id], 'commit')
             dao.execute("DELETE FROM course_details WHERE id = %s", [course_id], 'commit')
 

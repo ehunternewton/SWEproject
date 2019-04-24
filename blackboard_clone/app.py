@@ -1,9 +1,9 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from passlib.hash import sha256_crypt
-from .dao import dao
-from .admin_user import admin
-from .student_user import student
-from .teacher_user import teacher
+from dao import dao
+from admin_user import admin
+from student_user import student
+from teacher_user import teacher
 
 app = Flask(__name__)
 # init MySQL

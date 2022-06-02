@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="jumbotron text-center">
+        <h1>Welcome to xMenAcademy!</h1>
+            <img src="static/img/class_logo.jpg" width="50px" class="rounded-circle" alt="Rounded image" >
+
+        <p class="lead">A simple website built with the Python Flask framework, where you can keep up with your courses
+        online</p>
+
+        {% if session.admin_logged_in == NULL and session.student_logged_in == NULL and session.teacher_logged_in == NULL%}
+            <a href="/login" class="btn btn-info">Sign In</a>
+        {% endif %}
+    </div>
+    <div>
+        <iframe style="position: absolute; margin: auto; top: 75%; left: 50%; transform: translate(-50%, -50%);"
+            width="460" height="315" src="https://www.youtube.com/embed/sAkL2-vh2Sk?rel=0;&autoplay=1&mute=1"
+            frameborder="0" allowfullscreen include>
+        </iframe>
+    </div>
+    <div>
+    </div>
+{% endblock %}
